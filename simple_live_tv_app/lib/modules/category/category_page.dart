@@ -8,6 +8,7 @@ import 'package:simple_live_tv_app/app/app_focus_node.dart';
 import 'package:simple_live_tv_app/app/app_style.dart';
 import 'package:simple_live_tv_app/app/sites.dart';
 import 'package:simple_live_tv_app/modules/category/category_controller.dart';
+import 'package:simple_live_tv_app/widgets/apple_glass_container.dart';
 import 'package:simple_live_tv_app/widgets/app_scaffold.dart';
 import 'package:simple_live_tv_app/widgets/button/highlight_button.dart';
 
@@ -19,106 +20,102 @@ class CategoryPage extends GetView<CategoryController> {
     return AppScaffold(
       child: Column(
         children: [
-          AppStyle.vGap32,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AppStyle.hGap48,
-              HighlightButton(
-                focusNode: AppFocusNode(),
-                iconData: Icons.arrow_back,
-                text: "返回",
-                autofocus: true,
-                onTap: () {
-                  Get.back();
-                },
-              ),
-              AppStyle.hGap32,
-              Text(
-                "直播类目",
-                style: AppStyle.titleStyleWhite.copyWith(
-                  fontSize: 36.w,
-                  fontWeight: FontWeight.bold,
+          AppleGlassContainer(
+            borderRadius: BorderRadius.zero,
+            padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 48.w),
+            blur: 30,
+            color: Colors.black.withOpacity(0.3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                HighlightButton(
+                  focusNode: AppFocusNode(),
+                  iconData: Icons.arrow_back_rounded,
+                  text: "返回",
+                  autofocus: true,
+                  onTap: () {
+                    Get.back();
+                  },
                 ),
-              ),
-              AppStyle.hGap24,
-              const Spacer(),
-              Obx(
-                () => Visibility(
-                  visible: controller.loadding.value,
-                  child: SizedBox(
-                    width: 48.w,
-                    height: 48.w,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 4.w,
+                AppStyle.hGap32,
+                Text(
+                  "直播类目",
+                  style: AppStyle.titleStyleWhite.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Obx(
+                  () => Visibility(
+                    visible: controller.loadding.value,
+                    child: SizedBox(
+                      width: 32.w,
+                      height: 32.w,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 3.w,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              //  AppStyle.hGap24,
-              // HighlightButton(
-              //   focusNode: AppFocusNode(),
-              //   iconData: Icons.refresh,
-              //   text: "刷新",
-              //   onTap: () {
-              //     controller.refreshData();
-              //   },
-              // ),
-              AppStyle.hGap48,
-            ],
+              ],
+            ),
           ),
           AppStyle.vGap24,
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 36.w,
-            children: Sites.supportSites
-                .map(
-                  (e) => Obx(
-                    () => HighlightButton(
-                      icon: Image.asset(
-                        e.logo,
-                        width: 48.w,
-                        height: 48.w,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 48.w),
+            child: Row(
+              children: Sites.supportSites
+                  .map(
+                    (e) => Padding(
+                      padding: EdgeInsets.only(right: 24.w),
+                      child: Obx(
+                        () => HighlightButton(
+                          icon: Image.asset(
+                            e.logo,
+                            width: 36.w,
+                            height: 36.w,
+                          ),
+                          text: e.name,
+                          selected: controller.siteId.value == e.id,
+                          focusNode: AppFocusNode(),
+                          onTap: () {
+                            controller.setSite(e.id);
+                          },
+                        ),
                       ),
-                      text: e.name,
-                      selected: controller.siteId.value == e.id,
-                      focusNode: AppFocusNode(),
-                      onTap: () {
-                        controller.setSite(e.id);
-                      },
                     ),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           ),
           AppStyle.vGap24,
           Expanded(
             child: Obx(
               () => ListView.builder(
-                padding: AppStyle.edgeInsetsH48,
+                padding: AppStyle.edgeInsetsH48.copyWith(bottom: 48.w),
                 itemCount: controller.list.length,
                 controller: controller.scrollController,
                 itemBuilder: (_, i) {
                   var item = controller.list[i];
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: AppStyle.edgeInsetsV32,
+                        padding: EdgeInsets.only(top: 48.w, bottom: 24.w),
                         child: Text(
                           item.name,
-                          style: AppStyle.titleStyleWhite,
+                          style: AppStyle.titleStyleWhite.copyWith(
+                            fontSize: 32.w,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Obx(
-                        () => GridView.count(
-                          shrinkWrap: true,
-                          padding: AppStyle.edgeInsetsV8,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 8,
-                          crossAxisSpacing: 36.w,
-                          mainAxisSpacing: 36.w,
+                        () => Wrap(
+                          spacing: 24.w,
+                          runSpacing: 24.w,
                           children: item.showAll.value
                               ? (item.childrenExt
                                   .map(
@@ -145,59 +142,80 @@ class CategoryPage extends GetView<CategoryController> {
   }
 
   Widget buildSubCategory(LiveSubCategoryExt item) {
-    return HighlightWidget(
-      focusNode: item.focusNode,
-      onTap: () {
-        AppNavigator.toCategoryDetail(site: controller.site, category: item);
-      },
-      color: Colors.white10,
-      borderRadius: AppStyle.radius16,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          (item.pic != null && item.pic!.isNotEmpty)
-              ? NetImage(
-                  item.pic ?? "",
-                  width: 64.w,
-                  height: 64.w,
-                  borderRadius: 16.w,
-                  cacheWidth: 100,
-                )
-              : Image.asset(
-                  "assets/images/${controller.site.id}.png",
-                  width: 64.w,
-                  height: 64.w,
-                ),
-          AppStyle.vGap12,
-          Text(
-            item.name,
-            maxLines: 1,
-            textAlign: TextAlign.center,
-            style: item.focusNode.isFoucsed.value
-                ? AppStyle.textStyleBlack
-                : AppStyle.textStyleWhite,
+    return SizedBox(
+      width: 160.w,
+      child: HighlightWidget(
+        focusNode: item.focusNode,
+        onTap: () {
+          AppNavigator.toCategoryDetail(site: controller.site, category: item);
+        },
+        borderRadius: AppStyle.radius20,
+        child: Container(
+          padding: AppStyle.edgeInsetsA16,
+          decoration: BoxDecoration(
+            color: AppColors.appleGray,
+            borderRadius: AppStyle.radius20,
           ),
-        ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              (item.pic != null && item.pic!.isNotEmpty)
+                  ? NetImage(
+                      item.pic ?? "",
+                      width: 56.w,
+                      height: 56.w,
+                      borderRadius: 12.w,
+                      cacheWidth: 100,
+                    )
+                  : Image.asset(
+                      "assets/images/${controller.site.id}.png",
+                      width: 56.w,
+                      height: 56.w,
+                    ),
+              AppStyle.vGap12,
+              Text(
+                item.name,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: AppStyle.textStyleWhite.copyWith(
+                  fontSize: 22.w,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget buildShowMore(AppLiveCategory item) {
-    return HighlightWidget(
-      focusNode: item.moreFocusNode,
-      onTap: () {
-        item.showAll.value = true;
-      },
-      color: Colors.white10,
-      borderRadius: AppStyle.radius16,
-      child: Center(
-        child: Text(
-          "显示全部",
-          maxLines: 1,
-          textAlign: TextAlign.center,
-          style: item.moreFocusNode.isFoucsed.value
-              ? AppStyle.textStyleBlack
-              : AppStyle.textStyleWhite,
+    return SizedBox(
+      width: 160.w,
+      child: HighlightWidget(
+        focusNode: item.moreFocusNode,
+        onTap: () {
+          item.showAll.value = true;
+        },
+        borderRadius: AppStyle.radius20,
+        child: Container(
+          padding: AppStyle.edgeInsetsA16,
+          height: 140.w, // Fixed height to match other items approximately
+          decoration: BoxDecoration(
+            color: AppColors.appleGray.withOpacity(0.5),
+            borderRadius: AppStyle.radius20,
+          ),
+          child: Center(
+            child: Text(
+              "更多",
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              style: AppStyle.textStyleWhite.copyWith(
+                fontSize: 24.w,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );

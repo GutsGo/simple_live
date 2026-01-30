@@ -8,9 +8,14 @@ class AppColors {
   static ColorScheme lightColorScheme = ColorScheme.fromSwatch(
     primarySwatch: Colors.pink,
     brightness: Brightness.dark,
-    //primaryColorDark: const Color(0xfff06595),
     accentColor: const Color(0xfff06595),
   );
+
+  static const Color appleGray = Color(0xFF1C1C1E);
+  static const Color appleDarkGray = Color(0xFF121212);
+  static const Color appleGlass = Color(0x33FFFFFF);
+  static const Color appleGlassDark = Color(0x661C1C1E);
+  static const Color appleWhite = Color(0xFFF2F2F7);
 }
 
 class AppStyle {
@@ -138,6 +143,7 @@ class AppStyle {
   static BorderRadius get radius8 => BorderRadius.circular(8.w);
   static BorderRadius get radius12 => BorderRadius.circular(12.w);
   static BorderRadius get radius16 => BorderRadius.circular(16.w);
+  static BorderRadius get radius20 => BorderRadius.circular(20.w);
   static BorderRadius get radius24 => BorderRadius.circular(24.w);
   static BorderRadius get radius32 => BorderRadius.circular(32.w);
   static BorderRadius get radius48 => BorderRadius.circular(48.w);
@@ -180,10 +186,17 @@ class AppStyle {
 
   static List<BoxShadow> get highlightShadow => [
         BoxShadow(
-          blurRadius: 6.w,
-          spreadRadius: 2.w,
-          color: Colors.pink.shade400,
-          //color: Color.fromARGB(255, 255, 120, 167),
+          blurRadius: 16.w,
+          spreadRadius: 4.w,
+          color: Colors.white.withOpacity(0.3),
+        )
+      ];
+
+  static List<BoxShadow> get appleFocusShadow => [
+        BoxShadow(
+          blurRadius: 30.w,
+          offset: Offset(0, 15.w),
+          color: Colors.black.withOpacity(0.4),
         )
       ];
 }

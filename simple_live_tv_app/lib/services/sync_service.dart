@@ -62,7 +62,7 @@ class SyncService extends GetxService {
           }
           return;
         }
-      } else if (str == 'Who is SimpleLive?') {
+      } else if (str == 'Who is StitchTV?') {
         //如果http服务已经启动，就回复自己的信息
         if (httpRunning.value) {
           sendInfo();
@@ -119,7 +119,7 @@ class SyncService extends GetxService {
   }
 
   Future<String> getDeviceName() async {
-    var name = "SimpleLive-TV";
+    var name = "StitchTV-TV";
     if (Platform.isAndroid) {
       var info = await deviceInfo.androidInfo;
       name = info.model;
@@ -177,7 +177,7 @@ class SyncService extends GetxService {
       'status': true,
       'message': 'http server is running...',
       "version":
-          'SimpeLive ${Platform.operatingSystem} v${Utils.packageInfo.version}',
+          'StitchTV ${Platform.operatingSystem} v${Utils.packageInfo.version}',
     });
   }
 

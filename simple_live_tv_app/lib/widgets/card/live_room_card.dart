@@ -33,128 +33,123 @@ class LiveRoomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return HighlightWidget(
       focusNode: focusNode,
-      color: Colors.white10,
       onTap: onTap,
-      borderRadius: AppStyle.radius16,
+      borderRadius: AppStyle.radius20,
       child: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.w),
-                topRight: Radius.circular(16.w),
-              ),
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: NetImage(
-                      cover,
-                      cacheWidth: 400,
-                    ),
-                  ),
-                  Positioned(
-                    right: 8.w,
-                    top: 8.w,
-                    child: Container(
-                      padding:
-                          AppStyle.edgeInsetsH8.copyWith(top: 4.w, bottom: 4.w),
-                      decoration: BoxDecoration(
-                        color: focusNode.isFoucsed.value
-                            ? Colors.white
-                            : Colors.black54,
-                        borderRadius: AppStyle.radius8,
+        () => Container(
+          decoration: BoxDecoration(
+            color: AppColors.appleGray,
+            borderRadius: AppStyle.radius20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.w),
+                  topRight: Radius.circular(20.w),
+                ),
+                child: Stack(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: NetImage(
+                        cover,
+                        cacheWidth: 400,
                       ),
-                      child: Text.rich(
-                        TextSpan(
-                          text: "",
+                    ),
+                    Positioned(
+                      right: 12.w,
+                      top: 12.w,
+                      child: Container(
+                        padding: AppStyle.edgeInsetsH12
+                            .copyWith(top: 4.w, bottom: 4.w),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.6),
+                          borderRadius: AppStyle.radius24,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: Padding(
-                                padding: AppStyle.edgeInsetsR8,
-                                child: Icon(
-                                  Icons.whatshot,
-                                  color: focusNode.isFoucsed.value
-                                      ? Colors.orange
-                                      : Colors.white,
-                                  size: 20.w,
-                                ),
-                              ),
+                            Icon(
+                              Icons.whatshot,
+                              color: Colors.orange,
+                              size: 20.w,
                             ),
-                            TextSpan(
-                              text: Utils.onlineToString(online),
+                            AppStyle.hGap4,
+                            Text(
+                              Utils.onlineToString(online),
+                              style: TextStyle(
+                                fontSize: 18.w,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
-                        style: TextStyle(
-                          fontSize: 20.w,
-                          color: focusNode.isFoucsed.value
-                              ? Colors.black
-                              : Colors.white,
-                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              // child: Container(
-              //   height: 200.w,
-              // ),
-            ),
-            AppStyle.vGap8,
-            Padding(
-              padding: AppStyle.edgeInsetsH20,
-              child: SizedBox(
-                height: 56.w,
-                child: focusNode.isFoucsed.value
-                    ? Marquee(
-                        text: title,
-                        style: AppStyle.textStyleBlack,
-                        startAfter: const Duration(seconds: 1),
-                        velocity: 20,
-                        blankSpace: 200.w,
-                        //decelerationDuration: const Duration(seconds: 2),
-                        scrollAxis: Axis.horizontal,
-                      )
-                    : Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          title,
-                          style: AppStyle.textStyleWhite,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+              AppStyle.vGap12,
+              Padding(
+                padding: AppStyle.edgeInsetsH20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 48.w,
+                      child: focusNode.isFoucsed.value
+                          ? Marquee(
+                              text: title,
+                              style: AppStyle.textStyleWhite.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28.w,
+                              ),
+                              startAfter: const Duration(seconds: 1),
+                              velocity: 30,
+                              blankSpace: 100.w,
+                              scrollAxis: Axis.horizontal,
+                            )
+                          : Text(
+                              title,
+                              style: AppStyle.textStyleWhite.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28.w,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                    ),
+                    AppStyle.vGap4,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.account_circle_outlined,
+                          color: Colors.white70,
+                          size: 24.w,
                         ),
-                      ),
+                        AppStyle.hGap8,
+                        Expanded(
+                          child: Text(
+                            anchor,
+                            style: AppStyle.subTextStyleWhite.copyWith(
+                              fontSize: 22.w,
+                              color: Colors.white70,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AppStyle.hGap20,
-                Icon(
-                  Icons.account_circle,
-                  color: focusNode.isFoucsed.value
-                      ? Colors.black54
-                      : Colors.white54,
-                  size: 32.w,
-                ),
-                AppStyle.hGap12,
-                Expanded(
-                  child: Text(
-                    anchor,
-                    style: focusNode.isFoucsed.value
-                        ? AppStyle.subTextStyleBlack
-                        : AppStyle.subTextStyleWhite,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            AppStyle.vGap12,
-          ],
+              AppStyle.vGap16,
+            ],
+          ),
         ),
       ),
     );

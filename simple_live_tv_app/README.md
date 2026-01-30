@@ -1,4 +1,4 @@
-# simple_live_tv_app
+# StitchTV (乱炖直播)
 
-Simple Live Android TV APP
+乱炖直播 (StitchTV) Android TV APP
 

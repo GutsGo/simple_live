@@ -19,7 +19,7 @@ mixin PlayerMixin {
   /// 播放器实例
   late final player = Player(
     configuration: const PlayerConfiguration(
-      title: "Simple Live Player",
+      title: "StitchTV Player",
       // bufferSize:
       //     // media-kit #549
       //     AppSettingsController.instance.playerBufferSize.value * 1024 * 1024,
@@ -30,9 +30,13 @@ mixin PlayerMixin {
   Future<void> initializePlayer() async {
     var pp = player.platform as NativePlayer;
 
-    // media_kit 仓库更新导致的问题，临时解决办法
     if (Platform.isAndroid) {
       await pp.setProperty('force-seekable', 'yes');
+      // 模拟器上如果 opengl-es 黑屏，尝试改回默认渲染或增加容错参数
+      await pp.setProperty('vd-lavc-fast', 'yes');
+      await pp.setProperty('vd-lavc-skiploopfilter', 'all');
+      // 增加丢帧处理，防止模拟器性能不足导致卡在第一帧黑屏
+      await pp.setProperty('framedrop', 'vo');
     }
   }
 
@@ -40,14 +44,15 @@ mixin PlayerMixin {
   late final videoController = VideoController(
     player,
     configuration: AppSettingsController.instance.playerCompatMode.value
-        ? const VideoControllerConfiguration(
+        ? VideoControllerConfiguration(
             vo: 'mediacodec_embed',
             hwdec: 'mediacodec',
+            androidAttachSurfaceAfterVideoParameters: Platform.isAndroid,
           )
         : VideoControllerConfiguration(
             enableHardwareAcceleration:
                 AppSettingsController.instance.hardwareDecode.value,
-            androidAttachSurfaceAfterVideoParameters: false,
+            androidAttachSurfaceAfterVideoParameters: Platform.isAndroid,
           ),
   );
 }
@@ -283,12 +288,28 @@ class PlayerController extends BaseController
   void mediaError(String error) {}
 
   @override
-  void onClose() async {
+  void onClose() {
     Log.w("播放器关闭");
     disposeStream();
     disposeDanmakuController();
-    await resetSystem();
-    await player.dispose();
+    hideControlsTimer?.cancel();
+    hideSeekTipTimer?.cancel();
+    resetSystem();
+
+    // 强制先停止播放，并异步销毁播放器与控制器，防止阻塞主线程导致卡死
+    // 销毁顺序建议为：stop -> videoController.dispose -> player.dispose
+    // 使用微任务确保 GetX 的 onClose 流程能立即完成，而耗时的原生销毁在后台处理
+    final p = player;
+    Future.microtask(() async {
+      try {
+        await p.stop();
+        await p.dispose();
+        Log.w("播放器已销毁完成");
+      } catch (e, s) {
+        Log.e("播放器销毁时发生异常: $e", s);
+      }
+    });
+
     super.onClose();
   }
 }

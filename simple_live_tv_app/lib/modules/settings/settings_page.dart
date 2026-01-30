@@ -483,10 +483,17 @@ class SettingsPage extends GetView<SettingsController> {
       padding: AppStyle.edgeInsetsA48,
       children: [
         HighlightListTile(
+          focusNode: AppFocusNode(),
+          title: "应用名称",
+          subtitle: "StitchTV (乱炖直播)",
+          onTap: () {},
+        ),
+        AppStyle.vGap24,
+        HighlightListTile(
           focusNode: controller.versionFocusNode,
           title: "版本",
           subtitle: "v${Utils.packageInfo.version}",
-          onTap: ()=>{},
+          onTap: () {},
         ),
       ],
     );

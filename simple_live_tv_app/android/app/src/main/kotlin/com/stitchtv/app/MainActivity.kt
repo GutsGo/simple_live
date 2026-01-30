@@ -1,4 +1,4 @@
-package com.xycz.simple_live_tv
+package com.stitchtv.app
 
 import io.flutter.embedding.android.FlutterActivity
 

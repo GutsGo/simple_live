@@ -30,7 +30,7 @@ class AgreementPage extends StatelessWidget {
               ),
               AppStyle.vGap24,
               Text(
-                "欢迎使用Simple Live TV，请在使用前仔细阅读以下内容：",
+                "欢迎使用乱炖直播，请在使用前仔细阅读以下内容：",
                 style: AppStyle.textStyleWhite,
               ),
               AppStyle.vGap12,

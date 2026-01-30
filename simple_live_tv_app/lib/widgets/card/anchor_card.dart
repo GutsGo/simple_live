@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:simple_live_tv_app/app/app_focus_node.dart';
 import 'package:simple_live_tv_app/app/app_style.dart';
 import 'package:simple_live_tv_app/app/sites.dart';
@@ -33,65 +32,68 @@ class AnchorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var site = Sites.allSites[siteId]!;
     var focusNode = this.focusNode ?? AppFocusNode();
-    return Obx(
-      () => HighlightWidget(
-        onTap: onTap ??
-            () {
-              AppNavigator.toLiveRoomDetail(site: site, roomId: roomId);
-            },
-        focusNode: focusNode,
-        autofocus: autofocus,
-        borderRadius: AppStyle.radius16,
-        color: Colors.white10,
+    return HighlightWidget(
+      onTap: onTap ??
+          () {
+            AppNavigator.toLiveRoomDetail(site: site, roomId: roomId);
+          },
+      focusNode: focusNode,
+      autofocus: autofocus,
+      borderRadius: AppStyle.radius20,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.appleGray,
+          borderRadius: AppStyle.radius20,
+        ),
         child: Stack(
           children: [
             Padding(
-              padding: AppStyle.edgeInsetsA20,
+              padding: AppStyle.edgeInsetsA24,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  NetImage(
-                    face,
-                    width: 100.w,
-                    height: 100.w,
-                    borderRadius: 100.w,
-                    cacheWidth: 100,
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white24, width: 2.w),
+                    ),
+                    child: NetImage(
+                      face,
+                      width: 100.w,
+                      height: 100.w,
+                      borderRadius: 100.w,
+                      cacheWidth: 100,
+                    ),
                   ),
-                  AppStyle.hGap16,
+                  AppStyle.hGap24,
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           name,
-                          style: TextStyle(
-                            fontSize: 36.w,
+                          style: AppStyle.textStyleWhite.copyWith(
+                            fontSize: 32.w,
+                            fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
-                            color: focusNode.isFoucsed.value
-                                ? Colors.black
-                                : Colors.white,
                           ),
                         ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              WidgetSpan(
-                                child: Image.asset(
-                                  site.logo,
-                                  width: 32.w,
-                                ),
+                        AppStyle.vGap4,
+                        Row(
+                          children: [
+                            Image.asset(
+                              site.logo,
+                              width: 28.w,
+                            ),
+                            AppStyle.hGap8,
+                            Text(
+                              site.name,
+                              style: AppStyle.subTextStyleWhite.copyWith(
+                                fontSize: 22.w,
+                                color: Colors.white70,
                               ),
-                              TextSpan(
-                                text: " ${site.name}",
-                              ),
-                            ],
-                          ),
-                          style: TextStyle(
-                            fontSize: 24.w,
-                            color: focusNode.isFoucsed.value
-                                ? Colors.black
-                                : Colors.white,
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -101,24 +103,36 @@ class AnchorCard extends StatelessWidget {
             ),
             if (liveStatus == 2)
               Positioned(
-                right: 0,
-                top: 0,
+                right: 12.w,
+                top: 12.w,
                 child: Container(
                   padding:
-                      AppStyle.edgeInsetsH16.copyWith(top: 4.w, bottom: 4.w),
+                      AppStyle.edgeInsetsH12.copyWith(top: 4.w, bottom: 4.w),
                   decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(12.w),
-                      bottomLeft: Radius.circular(12.w),
-                    ),
+                    color: Colors.green.withOpacity(0.8),
+                    borderRadius: AppStyle.radius24,
                   ),
-                  child: Text(
-                    "直播中",
-                    style: TextStyle(
-                      fontSize: 24.w,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8.w,
+                        height: 8.w,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      AppStyle.hGap8,
+                      Text(
+                        "直播中",
+                        style: TextStyle(
+                          fontSize: 18.w,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

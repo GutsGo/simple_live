@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:simple_live_tv_app/app/app_focus_node.dart';
 import 'package:simple_live_tv_app/app/app_style.dart';
@@ -74,24 +75,28 @@ class HighlightWidget extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           child: Obx(
-            () => AnimatedScale(
-              scale: focusNode.isFoucsed.value ? 1.1 : 1,
-              duration: const Duration(milliseconds: 200),
-              child: GestureDetector(
-                onTap: onTap,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius,
-                    boxShadow: focusNode.isFoucsed.value
-                        ? AppStyle.highlightShadow
-                        : null,
-                    color: (focusNode.isFoucsed.value || selected)
-                        ? foucsedColor
-                        : color,
-                  ),
-                  child: child,
+            () => AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              transform: Matrix4.identity()
+                ..scale(focusNode.isFoucsed.value ? 1.08 : 1.0),
+              transformAlignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                boxShadow: focusNode.isFoucsed.value
+                    ? AppStyle.appleFocusShadow
+                    : null,
+                border: Border.all(
+                  color: focusNode.isFoucsed.value
+                      ? Colors.white.withOpacity(0.8)
+                      : Colors.transparent,
+                  width: 2.w,
                 ),
+                color: (focusNode.isFoucsed.value || selected)
+                    ? foucsedColor
+                    : color,
               ),
+              child: child,
             ),
           ),
         ),

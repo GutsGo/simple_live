@@ -14,6 +14,7 @@ import 'package:simple_live_tv_app/widgets/button/highlight_button.dart';
 import 'package:simple_live_tv_app/widgets/button/highlight_list_tile.dart';
 import 'package:simple_live_tv_app/widgets/card/anchor_card.dart';
 import 'package:simple_live_tv_app/widgets/button/home_big_button.dart';
+import 'package:simple_live_tv_app/widgets/apple_glass_container.dart';
 import 'package:simple_live_tv_app/widgets/net_image.dart';
 import 'package:simple_live_tv_app/widgets/status/app_empty_widget.dart';
 
@@ -25,38 +26,46 @@ class HomePage extends GetView<HomeController> {
     return AppScaffold(
       child: Column(
         children: [
-          AppStyle.vGap32,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AppStyle.hGap48,
-              Text(
-                "Simple Live TV",
-                style: AppStyle.titleStyleWhite,
-              ),
-              AppStyle.hGap24,
-              const Spacer(),
-              Obx(
-                () => Text(
-                  controller.datetime.value,
-                  style: AppStyle.titleStyleWhite.copyWith(fontSize: 36.w),
+          AppleGlassContainer(
+            borderRadius: BorderRadius.zero,
+            padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 48.w),
+            blur: 30,
+            color: Colors.black.withOpacity(0.3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "乱炖直播",
+                  style: AppStyle.titleStyleWhite.copyWith(
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
                 ),
-              ),
-              AppStyle.hGap32,
-              HighlightButton(
-                focusNode: AppFocusNode(),
-                iconData: Icons.settings,
-                text: "设置",
-                onTap: () {
-                  controller.toSettings();
-                },
-              ),
-              AppStyle.hGap48,
-            ],
+                const Spacer(),
+                Obx(
+                  () => Text(
+                    controller.datetime.value,
+                    style: AppStyle.titleStyleWhite.copyWith(
+                      fontSize: 32.w,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+                AppStyle.hGap32,
+                HighlightButton(
+                  focusNode: AppFocusNode(),
+                  iconData: Icons.settings_outlined,
+                  text: "设置",
+                  onTap: () {
+                    controller.toSettings();
+                  },
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: ListView(
-              padding: AppStyle.edgeInsetsV32,
+              padding: AppStyle.edgeInsetsV48,
               children: [
                 Padding(
                   padding: AppStyle.edgeInsetsH48,
@@ -67,83 +76,69 @@ class HomePage extends GetView<HomeController> {
                         child: HomeBigButton(
                           autofocus: true,
                           focusNode: AppFocusNode(),
-                          text: "热门直播",
+                          text: "热门",
                           iconData: Remix.fire_line,
                           onTap: controller.toHotLive,
                         ),
                       ),
-                      AppStyle.hGap48,
+                      AppStyle.hGap32,
                       Expanded(
                         child: HomeBigButton(
-                          autofocus: true,
                           focusNode: AppFocusNode(),
-                          text: "直播类目",
+                          text: "类目",
                           iconData: Remix.apps_line,
                           onTap: controller.toCategory,
                         ),
                       ),
-                      AppStyle.hGap48,
+                      AppStyle.hGap32,
                       Expanded(
                         child: HomeBigButton(
-                          autofocus: true,
                           focusNode: AppFocusNode(),
-                          text: "搜索直播",
+                          text: "搜索",
                           iconData: Remix.search_2_line,
                           onTap: showSearchDialog,
                         ),
                       ),
-                      // AppStyle.hGap40,
-                      // Expanded(
-                      //   child: HomeBigButton(
-                      //     focusNode: AppFocusNode(),
-                      //     text: "我的关注",
-                      //     iconData: Icons.favorite_border,
-                      //     onTap: controller.toFollow,
-                      //   ),
-                      // ),
-                      AppStyle.hGap48,
+                      AppStyle.hGap32,
                       Expanded(
                         child: HomeBigButton(
                           focusNode: AppFocusNode(),
-                          text: "观看记录",
-                          iconData: Icons.history,
+                          text: "记录",
+                          iconData: Icons.history_rounded,
                           onTap: controller.toHistory,
                         ),
                       ),
-                      AppStyle.hGap48,
+                      AppStyle.hGap32,
                       Expanded(
                         child: HomeBigButton(
                           focusNode: AppFocusNode(),
-                          text: "数据同步",
-                          iconData: Icons.devices,
+                          text: "同步",
+                          iconData: Icons.sync_rounded,
                           onTap: controller.toSync,
                         ),
                       ),
                     ],
                   ),
                 ),
-                AppStyle.vGap32,
+                AppStyle.vGap48,
                 Padding(
                   padding: AppStyle.edgeInsetsH48,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: 64.w,
-                        height: 64.w,
-                        child: Center(
-                          child: Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
-                            size: 56.w,
-                          ),
-                        ),
+                      Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.pinkAccent,
+                        size: 40.w,
                       ),
-                      AppStyle.hGap24,
+                      AppStyle.hGap16,
                       Expanded(
                         child: Text(
                           "我的关注",
-                          style: AppStyle.titleStyleWhite,
+                          style: AppStyle.titleStyleWhite.copyWith(
+                            fontSize: 32.w,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Obx(
@@ -152,17 +147,17 @@ class HomePage extends GetView<HomeController> {
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 48.w,
-                                height: 48.w,
+                                width: 32.w,
+                                height: 32.w,
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
-                                  strokeWidth: 4.w,
+                                  strokeWidth: 3.w,
                                 ),
                               ),
-                              AppStyle.hGap16,
+                              AppStyle.hGap12,
                               Text(
-                                "更新状态中...",
-                                style: AppStyle.textStyleWhite,
+                                "更新中",
+                                style: AppStyle.subTextStyleWhite,
                               ),
                             ],
                           ),
@@ -171,14 +166,14 @@ class HomePage extends GetView<HomeController> {
                       AppStyle.hGap16,
                       HighlightButton(
                         focusNode: AppFocusNode(),
-                        iconData: Icons.settings,
+                        iconData: Icons.edit_note_rounded,
                         text: "管理",
                         onTap: showManageDialog,
                       ),
-                      AppStyle.hGap32,
+                      AppStyle.hGap16,
                       HighlightButton(
                         focusNode: AppFocusNode(),
-                        iconData: Icons.refresh,
+                        iconData: Icons.refresh_rounded,
                         text: "刷新",
                         onTap: () {
                           FollowUserService.instance.refreshData();
@@ -193,8 +188,8 @@ class HomePage extends GetView<HomeController> {
                     padding: AppStyle.edgeInsetsH48,
                     itemCount: FollowUserService.instance.list.length,
                     crossAxisCount: 3,
-                    crossAxisSpacing: 48.w,
-                    mainAxisSpacing: 48.w,
+                    crossAxisSpacing: 32.w,
+                    mainAxisSpacing: 32.w,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (_, i) {
@@ -214,31 +209,36 @@ class HomePage extends GetView<HomeController> {
                 Obx(
                   () => Visibility(
                     visible: FollowUserService.instance.list.isEmpty,
-                    child: Column(
-                      children: [
-                        AppStyle.vGap24,
-                        LottieBuilder.asset(
-                          'assets/lotties/empty.json',
-                          width: 160.w,
-                          height: 160.w,
-                          repeat: false,
-                        ),
-                        AppStyle.vGap24,
-                        Text(
-                          "暂无任何关注\n您可以从其他端同步数据到此处",
-                          textAlign: TextAlign.center,
-                          style: AppStyle.textStyleWhite,
-                        ),
-                        AppStyle.vGap16,
-                        HighlightButton(
-                          focusNode: AppFocusNode(),
-                          iconData: Icons.devices,
-                          text: "同步数据",
-                          onTap: () {
-                            controller.toSync();
-                          },
-                        ),
-                      ],
+                    child: AppleGlassContainer(
+                      padding: AppStyle.edgeInsetsA48,
+                      child: Column(
+                        children: [
+                          LottieBuilder.asset(
+                            'assets/lotties/empty.json',
+                            width: 120.w,
+                            height: 120.w,
+                            repeat: false,
+                          ),
+                          AppStyle.vGap24,
+                          Text(
+                            "暂无关注的主播\n你可以从手机或电脑端同步关注列表",
+                            textAlign: TextAlign.center,
+                            style: AppStyle.textStyleWhite.copyWith(
+                              color: Colors.white70,
+                              height: 1.5,
+                            ),
+                          ),
+                          AppStyle.vGap32,
+                          HighlightButton(
+                            focusNode: AppFocusNode(),
+                            iconData: Icons.sync_rounded,
+                            text: "去同步数据",
+                            onTap: () {
+                              controller.toSync();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )

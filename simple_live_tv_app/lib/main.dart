@@ -66,7 +66,11 @@ Future initServices() async {
   Hive.registerAdapter(HistoryAdapter());
 
   //包信息
-  Utils.packageInfo = await PackageInfo.fromPlatform();
+  try {
+    Utils.packageInfo = await PackageInfo.fromPlatform();
+  } catch (e) {
+    Log.e("Failed to get package info: $e", StackTrace.current);
+  }
   //本地存储
   Log.d("Init LocalStorage Service");
   await Get.put(LocalStorageService()).init();
@@ -92,7 +96,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
-          title: 'Simple Live TV',
+          title: 'StitchTV',
           theme: AppStyle.lightTheme,
           initialRoute: AppSettingsController.instance.firstRun
               ? RoutePath.kAgreement

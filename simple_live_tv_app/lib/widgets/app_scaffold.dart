@@ -20,9 +20,9 @@ class AppScaffold extends StatelessWidget {
                   // Color.fromARGB(255, 14, 21, 29),
                   // Color.fromARGB(255, 29, 50, 70),
                   // linear-gradient(135deg,#141e30,#243b55)
-                  Color(0xff141e30),
-                  Color(0xff243b55),
-                  Color(0xff141e30),
+                  Color(0xFF000000),
+                  Color(0xFF1C1C1E),
+                  Color(0xFF000000),
                 ],
               ),
             ),

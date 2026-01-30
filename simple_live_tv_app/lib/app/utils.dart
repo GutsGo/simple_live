@@ -8,7 +8,13 @@ import 'package:get/get.dart';
 import 'package:simple_live_tv_app/app/app_style.dart';
 
 class Utils {
-  static late PackageInfo packageInfo;
+  static PackageInfo packageInfo = PackageInfo(
+    appName: 'StitchTV',
+    packageName: 'com.stitchtv.app',
+    version: '1.0.0',
+    buildNumber: '1',
+    buildSignature: '',
+  );
   static DateFormat dateFormat = DateFormat("MM-dd HH:mm");
   static DateFormat dateFormatWithYear = DateFormat("yyyy-MM-dd HH:mm");
 
