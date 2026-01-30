@@ -48,4 +48,15 @@ class FollowUserTag {
       userId: userId ?? this.userId,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FollowUserTag &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          tag == other.tag;
+
+  @override
+  int get hashCode => id.hashCode ^ tag.hashCode;
 }

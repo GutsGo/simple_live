@@ -19,13 +19,20 @@ class AppColors {
 }
 
 class AppStyle {
+  // MD3 Shape System
+  static BorderRadius radiusS = BorderRadius.circular(8); // Small
+  static BorderRadius radiusM = BorderRadius.circular(12); // Medium
+  static BorderRadius radiusL = BorderRadius.circular(16); // Large
+  static BorderRadius radiusXL =
+      BorderRadius.circular(28); // Extra Large (FAB, etc.)
+
   static ThemeData lightTheme = ThemeData(
     colorScheme: AppColors.lightColorScheme,
     useMaterial3: true,
     fontFamily: Platform.isWindows ? "Microsoft YaHei" : null,
     visualDensity: VisualDensity.standard,
     appBarTheme: AppBarTheme(
-      //elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: true,
       titleTextStyle: const TextStyle(
         fontSize: 16,
@@ -36,27 +43,45 @@ class AppStyle {
         systemNavigationBarColor: Colors.transparent,
       ),
     ),
-
-    // radioTheme: RadioThemeData(
-    //   fillColor: MaterialStateProperty.all(AppColors.lightColorScheme.primary),
-    // ),
-    // checkboxTheme: CheckboxThemeData(
-    //   fillColor: MaterialStateProperty.all(AppColors.lightColorScheme.primary),
-    // ),
-    // tabBarTheme: TabBarTheme(
-    //   labelColor: AppColors.lightColorScheme.primary,
-    //   unselectedLabelColor: Colors.white70,
-    //   indicatorSize: TabBarIndicatorSize.tab,
-    //   indicator: RectangularIndicator(
-    //     color: Colors.white.withOpacity(.8),
-    //     topLeftRadius: 24,
-    //     bottomLeftRadius: 24,
-    //     topRightRadius: 24,
-    //     bottomRightRadius: 24,
-    //     verticalPadding: 8,
-    //     horizontalPadding: 0,
-    //   ),
-    // ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: radiusM),
+      clipBehavior: Clip.antiAlias,
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(borderRadius: radiusS),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusXL),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusXL),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusS),
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: Colors.grey.withAlpha(30),
+      thickness: 1,
+      space: 1,
+    ),
+    navigationBarTheme: const NavigationBarThemeData(
+      height: 80,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+    ),
+    tabBarTheme: const TabBarThemeData(
+      dividerColor: Colors.transparent,
+      indicatorSize: TabBarIndicatorSize.label,
+    ),
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: radiusS),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -69,8 +94,7 @@ class AppStyle {
           fontFamily: Platform.isWindows ? "Microsoft YaHei" : null,
         ),
     appBarTheme: AppBarTheme(
-      //elevation: 0,
-
+      scrolledUnderElevation: 0,
       centerTitle: true,
       titleTextStyle: const TextStyle(
         fontSize: 16,
@@ -81,25 +105,45 @@ class AppStyle {
         systemNavigationBarColor: Colors.transparent,
       ),
     ),
-    // radioTheme: RadioThemeData(
-    //   fillColor: MaterialStateProperty.all(AppColors.darkColorScheme.primary),
-    // ),
-    // checkboxTheme: CheckboxThemeData(
-    //   fillColor: MaterialStateProperty.all(AppColors.darkColorScheme.primary),
-    // ),
-    // tabBarTheme: TabBarTheme(
-    //   labelColor: AppColors.darkColorScheme.primary,
-    //   unselectedLabelColor: Colors.white70,
-    //   indicator: RectangularIndicator(
-    //     color: Colors.white.withAlpha(50),
-    //     topLeftRadius: 24,
-    //     bottomLeftRadius: 24,
-    //     topRightRadius: 24,
-    //     bottomRightRadius: 24,
-    //     verticalPadding: 8,
-    //     horizontalPadding: 0,
-    //   ),
-    // ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: radiusM),
+      clipBehavior: Clip.antiAlias,
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(borderRadius: radiusS),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusXL),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusXL),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: radiusS),
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: Colors.grey.withAlpha(30),
+      thickness: 1,
+      space: 1,
+    ),
+    navigationBarTheme: const NavigationBarThemeData(
+      height: 80,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+    ),
+    tabBarTheme: const TabBarThemeData(
+      dividerColor: Colors.transparent,
+      indicatorSize: TabBarIndicatorSize.label,
+    ),
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: radiusS),
+    ),
   );
   static const vGap4 = SizedBox(
     height: 4,

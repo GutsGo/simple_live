@@ -1,4 +1,4 @@
-# simple_live_app
+# StitchTV (乱炖直播)
 
 基于核心库实现的Flutter APP客户端。
 

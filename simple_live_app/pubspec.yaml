@@ -1,7 +1,7 @@
 name: simple_live_app
 version: 1.11.4+11104
 publish_to: none
-description: "Simple Live APP"
+description: "StitchTV (乱炖直播)"
 environment:
   sdk: ">=3.0.5 <4.0.0"
 
@@ -92,8 +92,6 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/logo.png"
   min_sdk_android: 21
-  macos:
-    generate: true
 
 flutter:
   uses-material-design: true

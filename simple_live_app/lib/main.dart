@@ -105,10 +105,13 @@ Future initWindow() async {
     return;
   }
   await windowManager.ensureInitialized();
-  WindowOptions windowOptions = const WindowOptions(
-    minimumSize: Size(280, 280),
+  WindowOptions windowOptions = WindowOptions(
+    minimumSize: const Size(280, 280),
     center: true,
-    title: "Simple Live",
+    title: "乱炖直播",
+    titleBarStyle: (Platform.isMacOS || Platform.isWindows)
+        ? TitleBarStyle.hidden
+        : TitleBarStyle.normal,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
@@ -189,7 +192,7 @@ class MyApp extends StatelessWidget {
             seedColor: styleColor, brightness: Brightness.dark);
       }
       return GetMaterialApp(
-        title: "Simple Live",
+        title: "乱炖直播",
         theme: AppStyle.lightTheme.copyWith(colorScheme: lightColorScheme),
         darkTheme: AppStyle.darkTheme.copyWith(colorScheme: darkColorScheme),
         themeMode:
@@ -223,7 +226,8 @@ class MyApp extends StatelessWidget {
             const maxNormalPadding = 50.0;
 
             final mediaQueryData = MediaQuery.of(context);
-            final hasAbnormalPadding = mediaQueryData.viewPadding.top > maxNormalPadding;
+            final hasAbnormalPadding =
+                mediaQueryData.viewPadding.top > maxNormalPadding;
 
             final fixedMediaQueryData = hasAbnormalPadding
                 ? mediaQueryData.copyWith(
@@ -231,75 +235,94 @@ class MyApp extends StatelessWidget {
                     padding: fallbackPadding,
                     textScaler: const TextScaler.linear(1.0),
                   )
-                : mediaQueryData.copyWith(textScaler: const TextScaler.linear(1.0));
+                : mediaQueryData.copyWith(
+                    textScaler: const TextScaler.linear(1.0));
 
             return MediaQuery(
               data: fixedMediaQueryData,
-              child: Stack(
-              children: [
-                //侧键返回
-                RawGestureDetector(
-                  excludeFromSemantics: true,
-                  gestures: <Type, GestureRecognizerFactory>{
-                    FourthButtonTapGestureRecognizer:
-                        GestureRecognizerFactoryWithHandlers<
-                            FourthButtonTapGestureRecognizer>(
-                      () => FourthButtonTapGestureRecognizer(),
-                      (FourthButtonTapGestureRecognizer instance) {
-                        instance.onTapDown = (TapDownDetails details) async {
-                          //如果处于全屏状态，退出全屏
-                          if (!Platform.isAndroid && !Platform.isIOS) {
-                            if (await windowManager.isFullScreen()) {
-                              await windowManager.setFullScreen(false);
-                              return;
-                            }
-                          }
-                          Get.back();
-                        };
-                      },
-                    ),
-                  },
-                  child: KeyboardListener(
-                    focusNode: FocusNode(),
-                    onKeyEvent: (KeyEvent event) async {
-                      if (event is KeyDownEvent &&
-                          event.logicalKey == LogicalKeyboardKey.escape) {
-                        // ESC退出全屏
-                        // 如果处于全屏状态，退出全屏
-                        if (!Platform.isAndroid && !Platform.isIOS) {
-                          if (await windowManager.isFullScreen()) {
-                            await windowManager.setFullScreen(false);
-                            return;
-                          }
-                        }
-                      }
-                    },
-                    child: child!,
-                  ),
-                ),
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    if (Platform.isMacOS)
+                      const DragToMoveArea(
+                        child: SizedBox(height: 28, width: double.infinity),
+                      ),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          //侧键返回
+                          RawGestureDetector(
+                            excludeFromSemantics: true,
+                            gestures: <Type, GestureRecognizerFactory>{
+                              FourthButtonTapGestureRecognizer:
+                                  GestureRecognizerFactoryWithHandlers<
+                                      FourthButtonTapGestureRecognizer>(
+                                () => FourthButtonTapGestureRecognizer(),
+                                (FourthButtonTapGestureRecognizer instance) {
+                                  instance.onTapDown =
+                                      (TapDownDetails details) async {
+                                    //如果处于全屏状态，退出全屏
+                                    if (!Platform.isAndroid &&
+                                        !Platform.isIOS) {
+                                      if (await windowManager.isFullScreen()) {
+                                        await windowManager
+                                            .setFullScreen(false);
+                                        return;
+                                      }
+                                    }
+                                    Get.back();
+                                  };
+                                },
+                              ),
+                            },
+                            child: KeyboardListener(
+                              focusNode: FocusNode(),
+                              onKeyEvent: (KeyEvent event) async {
+                                if (event is KeyDownEvent &&
+                                    event.logicalKey ==
+                                        LogicalKeyboardKey.escape) {
+                                  // ESC退出全屏
+                                  // 如果处于全屏状态，退出全屏
+                                  if (!Platform.isAndroid && !Platform.isIOS) {
+                                    if (await windowManager.isFullScreen()) {
+                                      await windowManager.setFullScreen(false);
+                                      return;
+                                    }
+                                  }
+                                }
+                              },
+                              child: child!,
+                            ),
+                          ),
 
-                //查看DEBUG日志按钮
-                //只在Debug、Profile模式显示
-                Visibility(
-                  visible: !kReleaseMode,
-                  child: Positioned(
-                    right: 12,
-                    bottom: 100 + context.mediaQueryViewPadding.bottom,
-                    child: Opacity(
-                      opacity: 0.4,
-                      child: ElevatedButton(
-                        child: const Text("DEBUG LOG"),
-                        onPressed: () {
-                          Get.bottomSheet(
-                            const DebugLogPage(),
-                          );
-                        },
+                          //查看DEBUG日志按钮
+                          //只在Debug、Profile模式显示
+                          Visibility(
+                            visible: !kReleaseMode,
+                            child: Positioned(
+                              right: 12,
+                              bottom:
+                                  100 + context.mediaQueryViewPadding.bottom,
+                              child: Opacity(
+                                opacity: 0.4,
+                                child: ElevatedButton(
+                                  child: const Text("DEBUG LOG"),
+                                  onPressed: () {
+                                    Get.bottomSheet(
+                                      const DebugLogPage(),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
             );
           },
         ),

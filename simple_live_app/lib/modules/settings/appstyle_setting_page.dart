@@ -89,8 +89,8 @@ class AppstyleSettingPage extends GetView<AppSettingsController> {
                     Padding(
                       padding: AppStyle.edgeInsetsA12,
                       child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
+                        spacing: 12,
+                        runSpacing: 12,
                         children: <Color>[
                           const Color(0xffEF5350),
                           const Color(0xff3498db),
@@ -102,32 +102,47 @@ class AppstyleSettingPage extends GetView<AppSettingsController> {
                           const Color(0xffFF9800),
                         ]
                             .map(
-                              (e) => GestureDetector(
-                                onTap: () {
-                                  controller.setStyleColor(e.toARGB32());
-                                  Get.forceAppUpdate();
-                                },
-                                child: Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    color: e,
-                                    borderRadius: AppStyle.radius4,
-                                    border: Border.all(
-                                      color: Colors.grey.withAlpha(50),
-                                      width: 1,
+                              (e) => Obx(
+                                () => GestureDetector(
+                                  onTap: () {
+                                    controller.setStyleColor(e.toARGB32());
+                                    Get.forceAppUpdate();
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      color: e,
+                                      shape: BoxShape.circle,
+                                      border: controller.styleColor.value ==
+                                              e.toARGB32()
+                                          ? Border.all(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              width: 3,
+                                            )
+                                          : null,
+                                      boxShadow: controller.styleColor.value ==
+                                              e.toARGB32()
+                                          ? [
+                                              BoxShadow(
+                                                color: e.withAlpha(100),
+                                                blurRadius: 8,
+                                                spreadRadius: 2,
+                                              )
+                                            ]
+                                          : null,
                                     ),
-                                  ),
-                                  child: Obx(
-                                    () => Center(
-                                      child: Icon(
-                                        Icons.check,
-                                        color: controller.styleColor.value ==
-                                                e.toARGB32()
-                                            ? Colors.white
-                                            : Colors.transparent,
-                                      ),
-                                    ),
+                                    child: controller.styleColor.value ==
+                                            e.toARGB32()
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 20,
+                                          )
+                                        : null,
                                   ),
                                 ),
                               ),

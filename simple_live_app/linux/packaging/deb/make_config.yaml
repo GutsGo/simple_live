@@ -1,5 +1,5 @@
-display_name: Simple-Live
-package_name: simple-live
+display_name: StitchTV
+package_name: stitchtv
 maintainer:
   name: xiaoyaocz
   email: xiaoyaocz@52uwp.com
@@ -10,9 +10,9 @@ essential: false
 icon: assets/logo.png
 
 keywords:
-  - Simple Live
+  - StitchTV
 
-generic_name: Simple-Live
+generic_name: StitchTV
 
 categories:
   - Media

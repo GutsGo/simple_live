@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simple_live_app/app/app_style.dart';
+import 'package:simple_live_app/widgets/navigation_sidebar.dart';
 
 import 'indexed_controller.dart';
 
@@ -9,14 +11,33 @@ class IndexedPage extends GetView<IndexedController> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 900;
+        final isMedium = constraints.maxWidth > 600 && !isWide;
+        final isMobilePortait = constraints.maxWidth <= 600;
+
         return Scaffold(
           body: Row(
             children: [
-              Visibility(
-                visible: orientation == Orientation.landscape,
-                child: Obx(
+              // Sidebar for Desktop/Wide screens
+              if (isWide &&
+                  (Platform.isMacOS || Platform.isWindows || Platform.isLinux))
+                Obx(
+                  () => NavigationSidebar(
+                    items: controller.items,
+                    selectedIndex: controller.index.value,
+                    onDestinationSelected: controller.setIndex,
+                  ),
+                ),
+
+              // NavigationRail for Medium screens or non-desktop wide screens
+              if (isMedium ||
+                  (isWide &&
+                      !(Platform.isMacOS ||
+                          Platform.isWindows ||
+                          Platform.isLinux)))
+                Obx(
                   () => NavigationRail(
                     selectedIndex: controller.index.value,
                     onDestinationSelected: controller.setIndex,
@@ -25,6 +46,7 @@ class IndexedPage extends GetView<IndexedController> {
                         .map(
                           (item) => NavigationRailDestination(
                             icon: Icon(item.iconData),
+                            selectedIcon: Icon(item.iconData),
                             label: Text(item.title),
                             padding: AppStyle.edgeInsetsV8,
                           ),
@@ -32,15 +54,17 @@ class IndexedPage extends GetView<IndexedController> {
                         .toList(),
                   ),
                 ),
-              ),
+
               Expanded(
                 child: Obx(
                   () => Container(
                     decoration: BoxDecoration(
                       border: Border(
-                        left: orientation == Orientation.landscape
+                        left: (isWide || isMedium)
                             ? BorderSide(
-                                color: Colors.grey.withAlpha(50),
+                                color: Theme.of(context)
+                                    .dividerColor
+                                    .withAlpha(30),
                                 width: 1,
                               )
                             : BorderSide.none,
@@ -55,25 +79,25 @@ class IndexedPage extends GetView<IndexedController> {
               ),
             ],
           ),
-          bottomNavigationBar: Visibility(
-            visible: orientation == Orientation.portrait,
-            child: Obx(
-              () => NavigationBar(
-                selectedIndex: controller.index.value,
-                onDestinationSelected: controller.setIndex,
-                height: 56,
-                labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-                destinations: controller.items
-                    .map(
-                      (item) => NavigationDestination(
-                        icon: Icon(item.iconData),
-                        label: item.title,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ),
+          bottomNavigationBar: isMobilePortait
+              ? Obx(
+                  () => NavigationBar(
+                    selectedIndex: controller.index.value,
+                    onDestinationSelected: controller.setIndex,
+                    height: 80,
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.alwaysShow,
+                    destinations: controller.items
+                        .map(
+                          (item) => NavigationDestination(
+                            icon: Icon(item.iconData),
+                            label: item.title,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                )
+              : null,
         );
       },
     );

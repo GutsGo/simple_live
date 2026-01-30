@@ -12,15 +12,16 @@ class CategoryPage extends GetView<CategoryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         titleSpacing: 8,
         title: TabBar(
           controller: controller.tabController,
           padding: EdgeInsets.zero,
-          tabAlignment: TabAlignment.center,
+          tabAlignment: TabAlignment.start,
+          dividerColor: Colors.transparent,
           tabs: Sites.supportSites
               .map(
                 (e) => Tab(
-                  //text: e.name,
                   child: Row(
                     children: [
                       Image.asset(
@@ -34,7 +35,7 @@ class CategoryPage extends GetView<CategoryController> {
                 ),
               )
               .toList(),
-          labelPadding: AppStyle.edgeInsetsH20,
+          labelPadding: AppStyle.edgeInsetsH16,
           isScrollable: true,
           indicatorSize: TabBarIndicatorSize.label,
         ),

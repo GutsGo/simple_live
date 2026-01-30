@@ -347,7 +347,7 @@ class RemoteSyncRoomController extends BaseController {
             style: Get.textTheme.titleLarge,
           ),
           const Text(
-            "请使用其他Simple Live客户端扫描上方二维码\n建立连接后可选择需要同步的数据",
+            "请使用其他乱炖直播客户端扫描上方二维码\n建立连接后可选择需要同步的数据",
             textAlign: TextAlign.center,
           ),
         ],

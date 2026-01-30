@@ -46,28 +46,30 @@ class CategoryListView extends StatelessWidget {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    content: Obx(
-                      () => GridView.count(
-                        shrinkWrap: true,
-                        padding: AppStyle.edgeInsetsV8,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: MediaQuery.of(context).size.width ~/ 80,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                        children: item.showAll.value
-                            ? (item.children
-                                .map(
-                                  (e) => buildSubCategory(e),
-                                )
-                                .toList())
-                            : (item.take15
-                                .map(
-                                  (e) => buildSubCategory(e),
-                                )
-                                .toList()
-                              ..add(buildShowMore(item))),
-                      ),
-                    ),
+                    content: LayoutBuilder(builder: (context, constraints) {
+                      return Obx(
+                        () => GridView.count(
+                          shrinkWrap: true,
+                          padding: AppStyle.edgeInsetsV8,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: constraints.maxWidth ~/ 80,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          children: item.showAll.value
+                              ? (item.children
+                                  .map(
+                                    (e) => buildSubCategory(e),
+                                  )
+                                  .toList())
+                              : (item.take15
+                                  .map(
+                                    (e) => buildSubCategory(e),
+                                  )
+                                  .toList()
+                                ..add(buildShowMore(item))),
+                        ),
+                      );
+                    }),
                   ),
                 ],
               );

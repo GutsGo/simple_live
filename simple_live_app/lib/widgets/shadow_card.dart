@@ -1,45 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:simple_live_app/app/app_style.dart';
 
 class ShadowCard extends StatelessWidget {
   final Widget child;
   final double radius;
   final Function()? onTap;
+  final bool filled;
+
   const ShadowCard({
     required this.child,
-    this.radius = 8.0,
+    this.radius = 12.0,
     this.onTap,
+    this.filled = false,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: Get.isDarkMode
-            ? []
-            : [
-                BoxShadow(
-                  blurRadius: 4,
-                  color: Colors.grey.withAlpha(50),
-                )
-              ],
       ),
-      child: Material(
-        color: Theme.of(context).cardColor,
+      color: filled
+          ? colorScheme.surfaceContainerHighest
+          : colorScheme.surfaceContainerLow,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(radius),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(radius),
-          onTap: onTap,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: AppStyle.radius8,
-            ),
-            child: child,
-          ),
-        ),
+        child: child,
       ),
     );
   }

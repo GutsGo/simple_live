@@ -29,7 +29,7 @@ mixin PlayerMixin {
   /// 播放器实例
   late final player = Player(
     configuration: PlayerConfiguration(
-      title: "Simple Live Player",
+      title: "StitchTV Player",
       logLevel: AppSettingsController.instance.logEnable.value
           ? MPVLogLevel.info
           : MPVLogLevel.error,
@@ -49,7 +49,7 @@ mixin PlayerMixin {
       }
     }
     // media_kit 仓库更新导致的问题，临时解决办法
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       await pp.setProperty('force-seekable', 'yes');
     }
   }

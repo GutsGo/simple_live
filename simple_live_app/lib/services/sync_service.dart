@@ -41,7 +41,7 @@ class SyncService extends GetxService {
   void onInit() {
     Log.d('TVService init');
     deviceId = (const Uuid().v4()).split('-').first;
-    listenUDP();
+    // listenUDP();
     initServer();
     super.onInit();
   }
@@ -128,7 +128,7 @@ class SyncService extends GetxService {
   }
 
   Future<String> getDeviceName() async {
-    var name = "SimpleLive-${Platform.operatingSystem}";
+    var name = "StitchTV-${Platform.operatingSystem}";
     if (Platform.isAndroid) {
       var info = await deviceInfo.androidInfo;
       name = info.model;
@@ -225,7 +225,7 @@ class SyncService extends GetxService {
       'status': true,
       'message': 'http server is running...',
       "version":
-          'SimpeLive ${Platform.operatingSystem} v${Utils.packageInfo.version}',
+          'StitchTV ${Platform.operatingSystem} v${Utils.packageInfo.version}',
     });
   }
 
@@ -274,10 +274,11 @@ class SyncService extends GetxService {
   }
 
   /// 同步标签列表
-  Future<shelf.Response> _syncFollowUserTagRequest(shelf.Request request) async {
+  Future<shelf.Response> _syncFollowUserTagRequest(
+      shelf.Request request) async {
     try {
       var overlay =
-      int.parse(request.requestedUri.queryParameters['overlay'] ?? '0');
+          int.parse(request.requestedUri.queryParameters['overlay'] ?? '0');
 
       var body = await request.readAsString();
       Log.d('_syncFollowUserTagRequest: $body');

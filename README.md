@@ -1,6 +1,3 @@
-> ### ⚠ 本项目不提供Release安装包，请自行编译后运行测试。
-
-
 <p align="center">
     <img width="128" src="/assets/logo.png" alt="Simple Live logo">
 </p>
@@ -9,10 +6,6 @@
 <p align="center">
 简简单单的看直播
 </p>
-
-![浅色模式](/assets/screenshot_light.jpg)
-
-![深色模式](/assets/screenshot_dark.jpg)
 
 ## 支持直播平台：
 
@@ -46,38 +39,10 @@ Flutter : `3.38`
 
 ## 参考及引用
 
-[AllLive](https://github.com/xiaoyaocz/AllLive) `本项目的C#版，有兴趣可以看看`
-
-[dart_tars_protocol](https://github.com/xiaoyaocz/dart_tars_protocol.git)
-
-[wbt5/real-url](https://github.com/wbt5/real-url)
-
-[lovelyyoshino/Bilibili-Live-API](https://github.com/lovelyyoshino/Bilibili-Live-API/blob/master/API.WebSocket.md)
-
-[IsoaSFlus/danmaku](https://github.com/IsoaSFlus/danmaku)
-
-[BacooTang/huya-danmu](https://github.com/BacooTang/huya-danmu)
-
-[TarsCloud/Tars](https://github.com/TarsCloud/Tars)
-
-[YunzhiYike/douyin-live](https://github.com/YunzhiYike/douyin-live)
-
-[5ime/Tiktok_Signature](https://github.com/5ime/Tiktok_Signature)
+[SimpleLive](https://github.com/xiaoyaocz/dart_simple_live) 
 
 ## 声明
 
-本项目的所有功能都是基于互联网上公开的资料开发，无任何破解、逆向工程等行为。
-
-本项目仅用于学习交流编程技术，严禁将本项目用于商业目的。如有任何商业行为，均与本项目无关。
-
-如果本项目存在侵犯您的合法权益的情况，请及时与开发者联系，开发者将会及时删除有关内容。
-
-## Star History
-
-<a href="https://www.star-history.com/#xiaoyaocz/dart_simple_live&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=xiaoyaocz/dart_simple_live&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=xiaoyaocz/dart_simple_live&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=xiaoyaocz/dart_simple_live&type=Date" />
- </picture>
-</a>
++ 本项目的所有功能都是基于互联网上公开的资料开发，无任何破解、逆向工程等行为。
++ 本项目仅用于学习交流编程技术，严禁将本项目用于商业目的。如有任何商业行为，均与本项目无关。
++ 如果本项目存在侵犯您的合法权益的情况，请及时与开发者联系，开发者将会及时删除有关内容。

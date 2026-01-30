@@ -184,10 +184,12 @@ class FollowUserPage extends GetView<FollowUserController> {
       controller.tagList.first,
       ...controller.tagList.skip(3),
     ];
-    Rx<FollowUserTag> checkTag =
-        controller.tagList.indexOf(controller.filterMode.value) < 3
-            ? copiedList.first.obs
-            : controller.filterMode.value.obs;
+    Rx<FollowUserTag> checkTag = copiedList
+        .firstWhere(
+          (t) => t.tag == item.tag,
+          orElse: () => copiedList.first,
+        )
+        .obs;
     final ScrollController scrollController = ScrollController();
     Get.dialog(
       AlertDialog(

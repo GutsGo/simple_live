@@ -43,31 +43,30 @@ class FollowUserItem extends StatelessWidget {
               child: Obx(
                 () => Offstage(
                   offstage: item.liveStatus.value == 0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AppStyle.hGap12,
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: item.liveStatus.value == 2
-                              ? Colors.green
-                              : Colors.grey,
-                          borderRadius: AppStyle.radius12,
-                        ),
+                  child: Padding(
+                    padding: AppStyle.edgeInsetsL8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: item.liveStatus.value == 2
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
+                        borderRadius: AppStyle.radiusS,
                       ),
-                      AppStyle.hGap4,
-                      Text(
+                      child: Text(
                         getStatus(item.liveStatus.value),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
-                          color:
-                              item.liveStatus.value == 2 ? null : Colors.grey,
+                          color: item.liveStatus.value == 2
+                              ? Theme.of(context).colorScheme.onPrimaryContainer
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
