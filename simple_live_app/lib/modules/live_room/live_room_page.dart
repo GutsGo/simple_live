@@ -151,13 +151,26 @@ class LiveRoomPage extends GetView<LiveRoomController> {
               Expanded(
                 child: buildMediaPlayer(),
               ),
-              SizedBox(
-                width: 300,
-                child: Column(
-                  children: [
-                    buildUserProfile(context),
-                    buildMessageArea(),
-                  ],
+              Obx(
+                () => AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  width: AppSettingsController.instance.showRightPanel.value
+                      ? 300
+                      : 0,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: SizedBox(
+                      width: 300,
+                      child: Column(
+                        children: [
+                          buildUserProfile(context),
+                          buildMessageArea(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -667,6 +680,26 @@ class LiveRoomPage extends GetView<LiveRoomController> {
 
   List<Widget> buildAppbarActions(BuildContext context) {
     return [
+      if (Platform.isMacOS || Platform.isWindows || Platform.isLinux)
+        Obx(
+          () => MediaQuery.of(context).orientation == Orientation.landscape
+              ? IconButton(
+                  onPressed: () {
+                    AppSettingsController.instance.setShowRightPanel(
+                      !AppSettingsController.instance.showRightPanel.value,
+                    );
+                  },
+                  icon: Icon(
+                    AppSettingsController.instance.showRightPanel.value
+                        ? Icons.view_sidebar_rounded
+                        : Icons.view_sidebar_outlined,
+                  ),
+                  tooltip: AppSettingsController.instance.showRightPanel.value
+                      ? "收起侧边栏"
+                      : "展开侧边栏",
+                )
+              : const SizedBox.shrink(),
+        ),
       IconButton(
         onPressed: () {
           showMore();

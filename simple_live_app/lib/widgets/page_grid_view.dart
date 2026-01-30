@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:simple_live_app/app/app_style.dart';
 import 'package:simple_live_app/app/controller/base_controller.dart';
 import 'package:simple_live_app/widgets/status/app_empty_widget.dart';
 import 'package:simple_live_app/widgets/status/app_error_widget.dart';
@@ -72,9 +74,47 @@ class PageGridView extends StatelessWidget {
                   !pageController.pageLoadding.value &&
                   !pageController.pageEmpty.value,
               child: Center(
-                child: TextButton(
-                  onPressed: pageController.loadData,
-                  child: const Text("加载更多"),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: ClipRRect(
+                    borderRadius: AppStyle.radius24,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Get.theme.colorScheme.surface.withAlpha(100),
+                          borderRadius: AppStyle.radius24,
+                          border: Border.all(
+                            color: Get.theme.colorScheme.outline.withAlpha(50),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(10),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: TextButton(
+                          onPressed: pageController.loadData,
+                          style: TextButton.styleFrom(
+                            foregroundColor: Get.theme.colorScheme.onSurface,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: AppStyle.radius24,
+                            ),
+                          ),
+                          child: const Text(
+                            "加载更多",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

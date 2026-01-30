@@ -151,7 +151,10 @@ class AppSettingsController extends GetxController {
         .getValue(LocalStorageService.kUpdateFollowDuration, 10);
 
     updateFollowThreadCount.value = LocalStorageService.instance
-        .getValue(LocalStorageService.kUpdateFollowThreadCount, 0);  // 默认 0 = 自动
+        .getValue(LocalStorageService.kUpdateFollowThreadCount, 0); // 默认 0 = 自动
+
+    showRightPanel.value = LocalStorageService.instance
+        .getValue(LocalStorageService.kShowRightPanel, true);
 
     initSiteSort();
     initHomeSort();
@@ -530,5 +533,12 @@ class AppSettingsController extends GetxController {
     playerForceHttps.value = e;
     LocalStorageService.instance
         .setValue(LocalStorageService.kPlayerForceHttps, e);
+  }
+
+  var showRightPanel = true.obs;
+  void setShowRightPanel(bool e) {
+    showRightPanel.value = e;
+    LocalStorageService.instance
+        .setValue(LocalStorageService.kShowRightPanel, e);
   }
 }
