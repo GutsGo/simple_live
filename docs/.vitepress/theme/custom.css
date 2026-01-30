@@ -1,0 +1,394 @@
+:root {
+  --vp-c-brand-1: #151718;
+  /* Dark for the buttons */
+  --vp-c-brand-2: #2d3135;
+  --vp-c-brand-3: #454a50;
+  --vp-c-brand-soft: rgba(21, 23, 24, 0.05);
+
+  /* Modern Light Theme */
+  --vp-c-bg: #f8fafc;
+  --vp-c-bg-soft: #ffffff;
+  --vp-c-bg-mute: #f1f5f9;
+
+  --vp-c-text-1: #151718;
+  --vp-c-text-2: #64748b;
+  --vp-c-text-3: #94a3b8;
+
+  /* Removed transparent hero name variables to fix visibility */
+
+
+  /* Hero Section Spacing */
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+/* Background layout from reference image */
+body {
+  background-color: var(--vp-c-bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 207, 68, 0.1) 0%, transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(240, 81, 65, 0.1) 0%, transparent 30%);
+  background-attachment: fixed;
+}
+
+/* Hero Section Refinement */
+.VPHero {
+  padding-bottom: 40px !important;
+}
+
+.VPHero .name,
+.VPHero .name .clip {
+  font-weight: 800 !important;
+  font-size: 64px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em !important;
+  color: #151718 !important;
+  background: none !important;
+  -webkit-text-fill-color: #151718 !important;
+  /* Force color on clipped text */
+  position: relative;
+  display: inline-block !important;
+}
+
+.VPHero .name::after {
+  content: "";
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #f05141;
+  /* Red accent from reference */
+  border-radius: 3px;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.VPHero .text {
+  font-weight: 800 !important;
+  font-size: 64px !important;
+  line-height: 1.1 !important;
+  margin-bottom: 24px !important;
+  color: #151718 !important;
+  display: block !important;
+}
+
+
+.VPHero .tagline {
+  font-size: 18px !important;
+  color: #64748b !important;
+  max-width: 480px !important;
+  line-height: 1.6 !important;
+}
+
+.VPButton {
+  height: 48px !important;
+  line-height: 48px !important;
+  padding: 0 32px !important;
+  font-weight: 600 !important;
+}
+
+/* Rounded Dark Buttons */
+.VPButton.brand {
+  background-color: #151718 !important;
+  color: white !important;
+  border-radius: 99px !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.VPButton.brand:hover {
+  background-color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.VPButton.alt {
+  border-radius: 99px !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: white !important;
+  color: #151718 !important;
+  padding: 0 32px !important;
+}
+
+/* Hero Image & Layout */
+@media (min-width: 960px) {
+  .VPHero .container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .VPHero .main {
+    flex: 1 !important;
+    text-align: left !important;
+  }
+
+  .VPHero .image {
+    flex: 1 !important;
+  }
+}
+
+/* Multi-device Mockup look */
+.VPHero .image-src {
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15)) !important;
+  max-width: 100%;
+  transform: translate(-35%, -40%);
+}
+
+@media screen and (max-width: 960px) {
+  .VPFeatures {
+    display: none !important;
+  }
+
+  .main {
+    margin-top: 32px;
+  }
+}
+
+
+/* Feature cards as Platform Icons from the reference */
+.VPFeatures {
+  padding: 60px 0 !important;
+  background: transparent !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+}
+
+.VPFeatures .container {
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+}
+
+.VPFeatures .items {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: nowrap !important;
+  /* Keep them in one row on desktop */
+  gap: 20px !important;
+}
+
+@media (max-width: 960px) {
+  .VPFeatures .items {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .VPFeatures .items {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+.VPFeature {
+  flex: 0 1 140px !important;
+  /* Proper width for each platform card */
+  min-width: 120px !important;
+  background: white !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* Horizontal center */
+  justify-content: center !important;
+  /* Vertical center */
+  text-align: center !important;
+  margin: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  cursor: default !important;
+}
+
+/* 'Coming Soon' Badge Styles - only for non-clickable cards */
+div.VPFeature::before {
+  content: "即将推出";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #ffeba1 !important;
+  /* Soft yellow from reference */
+  color: #5c4b1a !important;
+  /* Dark brown text */
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+  border-bottom-right-radius: 12px !important;
+  z-index: 20 !important;
+  line-height: 1 !important;
+
+}
+
+/* Clickable cards (links) should not have the badge */
+a.VPFeature::before {
+  display: none !important;
+}
+
+/* Visual feedback for the clickable card */
+a.VPFeature {
+  cursor: pointer !important;
+}
+
+a.VPFeature:hover {
+  transform: none !important;
+}
+
+/* Disable hover effects for non-clickable cards */
+div.VPFeature:hover {
+  transform: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+
+.VPFeature .box {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.VPFeature .icon {
+  background: transparent !important;
+  margin: 0 0 12px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 48px !important;
+  height: 48px !important;
+}
+
+.VPFeature .title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #151718 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+  width: 100% !important;
+}
+
+.VPFeature .details {
+  display: none !important;
+  /* Hide details to look like platform icons */
+}
+
+/* Navbar black effect to match reference */
+.VPNavBar {
+  background-color: #000000 !important;
+  border-bottom: none !important;
+}
+
+.VPNavBar .content {
+  background-color: #000000 !important;
+}
+
+.VPNavBar .title,
+.VPNavBar .link {
+  color: white !important;
+  transition: color 0.25s, opacity 0.25s;
+}
+
+.VPNavBar .link:hover {
+  color: #f05141 !important;
+  /* Use red accent for nav hover too */
+}
+
+/* Social Links specifically */
+.VPSocialLink {
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.3s ease !important;
+}
+
+.VPSocialLink:hover {
+  color: white !important;
+  transform: scale(1.15);
+}
+
+
+/* Highlights Grid styles */
+.highlights-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 20px !important;
+  max-width: 1100px !important;
+  margin: 40px auto !important;
+  padding: 0 24px !important;
+}
+
+@media (max-width: 960px) {
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .highlights-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.highlight-card {
+  background: white !important;
+  /* Changed to white to make shadow more visible like platform cards */
+  border-radius: 16px !important;
+  padding: 32px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+
+.highlight-icon-wrapper {
+  background: rgba(0, 0, 0, 0.05) !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 24px !important;
+}
+
+.highlight-emoji {
+  font-size: 24px !important;
+}
+
+.highlight-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #151718 !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.highlight-details {
+  font-size: 14px !important;
+  color: #64748b !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+/* Social Links and Menu Button SVG adjustment */
+.VPSocialLink svg,
+.VPNavBarHamburger .container {
+  fill: white !important;
+  transition: all 0.3s ease;
+}
+
+
+.VPSocialLink:hover svg {
+  fill: #f05141 !important;
+}
+
+.VPNavBarHamburger:hover .container {
+  opacity: 0.7;
+}
