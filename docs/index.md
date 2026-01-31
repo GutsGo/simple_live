@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: Android TV 下载
-      link: https://github.com/GutsGo/simple_live/releases
+      link: https://github.com/GutsGo/stitchtv/releases
     - theme: alt
       text: GitHub 项目
-      link: https://github.com/GutsGo/simple_live
+      link: https://github.com/GutsGo/stitchtv
 
 features:
   - title: iOS
@@ -26,7 +26,7 @@ features:
   - title: Android TV
     icon: <img src="/device-AndroidTV.png" alt="Android TV" width="32" height="32" />
     details: Optimized for the big screen.
-    link: https://github.com/GutsGo/simple_live/releases
+    link: https://github.com/GutsGo/stitchtv/releases
   - title: Apple TV
     icon: <img src="/device-tvOS.png" alt="Apple TV" width="32" height="32" />
     details: Native tvOS experience.

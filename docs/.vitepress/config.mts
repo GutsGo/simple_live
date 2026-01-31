@@ -10,11 +10,11 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Downloads', link: 'https://github.com/GutsGo/simple_live/releases' }
+      { text: 'Downloads', link: 'https://github.com/GutsGo/stitchtv/releases' }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/GutsGo/simple_live' }
+      { icon: 'github', link: 'https://github.com/GutsGo/stitchtv' }
     ],
 
     footer: {
