@@ -1,10 +1,10 @@
 <p align="center">
-    <img width="128" src="/assets/logo.png" alt="Simple Live logo">
+    <img width="128" src="/simple_live_app/assets/logo.png" alt="Stitch Live logo">
 </p>
-<h2 align="center">Simple Live</h2>
+<h2 align="center">Stitch Live</h2>
 
 <p align="center">
-简简单单的看直播
+  深耕多端开发，诚意打造出品。聚合全网直播资源，智能识别频道，无需复杂配置，极致流畅播放，优雅打造您的私人直播影院。
 </p>
 
 ## 支持直播平台：

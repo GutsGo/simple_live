@@ -1,6 +1,6 @@
 display_name: 乱炖直播
 publisher_display_name: xiaoyaocz
-identity_name: com.xycz.stitchtv
+identity_name: com.gutsgo.stitchtv
 logo_path: assets/logo_400.png
 capabilities: internetClient
 languages: zh-cn
