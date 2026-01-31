@@ -39,7 +39,7 @@ Flutter : `3.38`
 
 ## 参考及引用
 
-[StitchTV](https://github.com/xiaoyaocz/dart_stitchtv) 
+[SimpleLive](https://github.com/xiaoyaocz/dart_simple_live) 
 
 ## 声明
 
