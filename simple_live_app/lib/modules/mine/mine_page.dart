@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ class MinePage extends StatelessWidget {
               systemNavigationBarColor: Colors.transparent,
             ),
       child: SafeArea(
+        top: !Platform.isMacOS,
         child: ListView(
           padding: AppStyle.edgeInsetsA4,
           children: [

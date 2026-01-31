@@ -14,18 +14,117 @@ class FollowUserItem extends StatelessWidget {
   final Function()? onTap;
   final Function()? onLongPress;
   final bool playing;
+  final bool simple;
   const FollowUserItem({
     required this.item,
     this.onRemove,
     this.onTap,
     this.onLongPress,
     this.playing = false,
+    this.simple = false,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var site = Sites.allSites[item.siteId]!;
+    if (simple) {
+      return InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: NetImage(
+                      item.face,
+                      width: 56,
+                      height: 56,
+                      borderRadius: 28,
+                    ),
+                  ),
+                  Positioned(
+                    right: 2,
+                    bottom: 2,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(26),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        site.logo,
+                        width: 16,
+                        height: 16,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 2,
+                    bottom: 2,
+                    child: Obx(
+                      () => Offstage(
+                        offstage: item.liveStatus.value != 2,
+                        child: Container(
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.surface,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              AppStyle.vGap4,
+              Text(
+                item.userName,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+              Obx(
+                () => Visibility(
+                  visible: item.liveStatus.value == 2,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Text(
+                    "直播中",
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return ListTile(
       contentPadding: AppStyle.edgeInsetsL16.copyWith(right: 4),
       leading: NetImage(

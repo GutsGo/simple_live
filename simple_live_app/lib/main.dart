@@ -39,7 +39,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await migrateData();
-  await initWindow();
   MediaKit.ensureInitialized();
   await Hive.initFlutter(
     (!Platform.isAndroid && !Platform.isIOS)
@@ -48,6 +47,7 @@ void main() async {
   );
   //初始化服务
   await initServices();
+  await initWindow();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   //设置状态栏为透明
   SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
@@ -105,17 +105,28 @@ Future initWindow() async {
     return;
   }
   await windowManager.ensureInitialized();
+
+  Size? savedSize = LocalStorageService.instance.getWindowSize();
+  Offset? savedOffset = LocalStorageService.instance.getWindowOffset();
+
   WindowOptions windowOptions = WindowOptions(
+    size: savedSize,
     minimumSize: const Size(280, 280),
-    center: true,
+    center: savedSize == null || savedOffset == null,
     title: "乱炖直播",
     titleBarStyle: (Platform.isMacOS || Platform.isWindows)
         ? TitleBarStyle.hidden
         : TitleBarStyle.normal,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
+    if (savedOffset != null) {
+      await windowManager.setPosition(savedOffset);
+    }
     await windowManager.show();
     await windowManager.focus();
+    if (Platform.isMacOS) {
+      await windowManager.setPreventClose(true);
+    }
   });
 }
 
@@ -169,8 +180,65 @@ void initCoreLog() {
   };
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WindowListener {
+  Timer? _windowTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      windowManager.addListener(this);
+    }
+  }
+
+  @override
+  void dispose() {
+    _windowTimer?.cancel();
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      windowManager.removeListener(this);
+    }
+    super.dispose();
+  }
+
+  @override
+  void onWindowClose() async {
+    if (Platform.isMacOS) {
+      // macOS Cmd+Q 或 关闭窗口时，直接退出进程，防止 media_kit 报错
+      exit(0);
+    } else {
+      bool isPreventClose = await windowManager.isPreventClose();
+      if (isPreventClose) {
+        windowManager.destroy();
+      }
+    }
+  }
+
+  @override
+  void onWindowResized() {
+    _debounceWindowChange();
+  }
+
+  @override
+  void onWindowMoved() {
+    _debounceWindowChange();
+  }
+
+  void _debounceWindowChange() {
+    _windowTimer?.cancel();
+    _windowTimer = Timer(const Duration(seconds: 1), () async {
+      Size size = await windowManager.getSize();
+      Offset position = await windowManager.getPosition();
+      LocalStorageService.instance.saveWindowSize(size);
+      LocalStorageService.instance.saveWindowOffset(position);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +297,7 @@ class MyApp extends StatelessWidget {
             final hasAbnormalPadding =
                 mediaQueryData.viewPadding.top > maxNormalPadding;
 
-            final fixedMediaQueryData = hasAbnormalPadding
+            var fixedMediaQueryData = hasAbnormalPadding
                 ? mediaQueryData.copyWith(
                     viewPadding: fallbackPadding,
                     padding: fallbackPadding,
@@ -238,86 +306,81 @@ class MyApp extends StatelessWidget {
                 : mediaQueryData.copyWith(
                     textScaler: const TextScaler.linear(1.0));
 
+            // MacOS Safe Area Injection
+            if (Platform.isMacOS) {
+              fixedMediaQueryData = fixedMediaQueryData.copyWith(
+                padding: fixedMediaQueryData.padding.copyWith(top: 28),
+              );
+            }
+
             return MediaQuery(
               data: fixedMediaQueryData,
               child: Container(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
+                child: Stack(
                   children: [
-                    if (Platform.isMacOS)
-                      const DragToMoveArea(
-                        child: SizedBox(height: 28, width: double.infinity),
-                      ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          //侧键返回
-                          RawGestureDetector(
-                            excludeFromSemantics: true,
-                            gestures: <Type, GestureRecognizerFactory>{
-                              FourthButtonTapGestureRecognizer:
-                                  GestureRecognizerFactoryWithHandlers<
-                                      FourthButtonTapGestureRecognizer>(
-                                () => FourthButtonTapGestureRecognizer(),
-                                (FourthButtonTapGestureRecognizer instance) {
-                                  instance.onTapDown =
-                                      (TapDownDetails details) async {
-                                    //如果处于全屏状态，退出全屏
-                                    if (!Platform.isAndroid &&
-                                        !Platform.isIOS) {
-                                      if (await windowManager.isFullScreen()) {
-                                        await windowManager
-                                            .setFullScreen(false);
-                                        return;
-                                      }
-                                    }
-                                    Get.back();
-                                  };
-                                },
-                              ),
-                            },
-                            child: KeyboardListener(
-                              focusNode: FocusNode(),
-                              onKeyEvent: (KeyEvent event) async {
-                                if (event is KeyDownEvent &&
-                                    event.logicalKey ==
-                                        LogicalKeyboardKey.escape) {
-                                  // ESC退出全屏
-                                  // 如果处于全屏状态，退出全屏
-                                  if (!Platform.isAndroid && !Platform.isIOS) {
-                                    if (await windowManager.isFullScreen()) {
-                                      await windowManager.setFullScreen(false);
-                                      return;
-                                    }
+                    //侧键返回
+                    Positioned.fill(
+                      child: RawGestureDetector(
+                        excludeFromSemantics: true,
+                        gestures: <Type, GestureRecognizerFactory>{
+                          FourthButtonTapGestureRecognizer:
+                              GestureRecognizerFactoryWithHandlers<
+                                  FourthButtonTapGestureRecognizer>(
+                            () => FourthButtonTapGestureRecognizer(),
+                            (FourthButtonTapGestureRecognizer instance) {
+                              instance.onTapDown =
+                                  (TapDownDetails details) async {
+                                //如果处于全屏状态，退出全屏
+                                if (!Platform.isAndroid && !Platform.isIOS) {
+                                  if (await windowManager.isFullScreen()) {
+                                    await windowManager.setFullScreen(false);
+                                    return;
                                   }
                                 }
-                              },
-                              child: child!,
-                            ),
+                                Get.back();
+                              };
+                            },
                           ),
+                        },
+                        child: KeyboardListener(
+                          focusNode: FocusNode(),
+                          onKeyEvent: (KeyEvent event) async {
+                            if (event is KeyDownEvent &&
+                                event.logicalKey == LogicalKeyboardKey.escape) {
+                              // ESC退出全屏
+                              // 如果处于全屏状态，退出全屏
+                              if (!Platform.isAndroid && !Platform.isIOS) {
+                                if (await windowManager.isFullScreen()) {
+                                  await windowManager.setFullScreen(false);
+                                  return;
+                                }
+                              }
+                            }
+                          },
+                          child: child!,
+                        ),
+                      ),
+                    ),
 
-                          //查看DEBUG日志按钮
-                          //只在Debug、Profile模式显示
-                          Visibility(
-                            visible: !kReleaseMode,
-                            child: Positioned(
-                              right: 12,
-                              bottom:
-                                  100 + context.mediaQueryViewPadding.bottom,
-                              child: Opacity(
-                                opacity: 0.4,
-                                child: ElevatedButton(
-                                  child: const Text("DEBUG LOG"),
-                                  onPressed: () {
-                                    Get.bottomSheet(
-                                      const DebugLogPage(),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
+                    //查看DEBUG日志按钮
+                    //只在Debug、Profile模式显示
+                    Visibility(
+                      visible: !kReleaseMode,
+                      child: Positioned(
+                        right: 12,
+                        bottom: 100 + context.mediaQueryViewPadding.bottom,
+                        child: Opacity(
+                          opacity: 0.4,
+                          child: ElevatedButton(
+                            child: const Text("DEBUG LOG"),
+                            onPressed: () {
+                              Get.bottomSheet(
+                                const DebugLogPage(),
+                              );
+                            },
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

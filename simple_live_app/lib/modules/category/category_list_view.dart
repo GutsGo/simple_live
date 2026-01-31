@@ -50,7 +50,7 @@ class CategoryListView extends StatelessWidget {
                       return Obx(
                         () => GridView.count(
                           shrinkWrap: true,
-                          padding: AppStyle.edgeInsetsV8,
+                          padding: AppStyle.edgeInsetsB8,
                           physics: const NeverScrollableScrollPhysics(),
                           crossAxisCount: constraints.maxWidth ~/ 80,
                           crossAxisSpacing: 8,

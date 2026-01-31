@@ -24,10 +24,13 @@ class IndexedPage extends GetView<IndexedController> {
               if (isWide &&
                   (Platform.isMacOS || Platform.isWindows || Platform.isLinux))
                 Obx(
-                  () => NavigationSidebar(
-                    items: controller.items,
-                    selectedIndex: controller.index.value,
-                    onDestinationSelected: controller.setIndex,
+                  () => Padding(
+                    padding: EdgeInsets.only(top: Platform.isMacOS ? 28.0 : 0),
+                    child: NavigationSidebar(
+                      items: controller.items,
+                      selectedIndex: controller.index.value,
+                      onDestinationSelected: controller.setIndex,
+                    ),
                   ),
                 ),
 
@@ -38,20 +41,23 @@ class IndexedPage extends GetView<IndexedController> {
                           Platform.isWindows ||
                           Platform.isLinux)))
                 Obx(
-                  () => NavigationRail(
-                    selectedIndex: controller.index.value,
-                    onDestinationSelected: controller.setIndex,
-                    labelType: NavigationRailLabelType.none,
-                    destinations: controller.items
-                        .map(
-                          (item) => NavigationRailDestination(
-                            icon: Icon(item.iconData),
-                            selectedIcon: Icon(item.iconData),
-                            label: Text(item.title),
-                            padding: AppStyle.edgeInsetsV8,
-                          ),
-                        )
-                        .toList(),
+                  () => Container(
+                    padding: EdgeInsets.only(top: Platform.isMacOS ? 28.0 : 0),
+                    child: NavigationRail(
+                      selectedIndex: controller.index.value,
+                      onDestinationSelected: controller.setIndex,
+                      labelType: NavigationRailLabelType.none,
+                      destinations: controller.items
+                          .map(
+                            (item) => NavigationRailDestination(
+                              icon: Icon(item.iconData),
+                              selectedIcon: Icon(item.iconData),
+                              label: Text(item.title),
+                              padding: AppStyle.edgeInsetsV8,
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
 

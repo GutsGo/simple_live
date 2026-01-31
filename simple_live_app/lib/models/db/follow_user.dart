@@ -5,15 +5,15 @@ part 'follow_user.g.dart';
 
 @HiveType(typeId: 1)
 class FollowUser {
-  FollowUser({
-    required this.id,
-    required this.roomId,
-    required this.siteId,
-    required this.userName,
-    required this.face,
-    required this.addTime,
-    this.tag = "全部"
-  });
+  FollowUser(
+      {required this.id,
+      required this.roomId,
+      required this.siteId,
+      required this.userName,
+      required this.face,
+      required this.addTime,
+      this.tag = "全部",
+      this.watchCount = 0});
 
   ///id=siteId_roomId
   @HiveField(0)
@@ -37,6 +37,9 @@ class FollowUser {
   @HiveField(6)
   String tag;
 
+  @HiveField(7)
+  int watchCount;
+
   /// 直播状态
   /// 0=未知(加载中) 1=未开播 2=直播中
   Rx<int> liveStatus = 0.obs;
@@ -51,7 +54,8 @@ class FollowUser {
         userName: json['userName'],
         face: json['face'],
         addTime: DateTime.parse(json['addTime']),
-        tag: json["tag"]??"全部",
+        tag: json["tag"] ?? "全部",
+        watchCount: json["watchCount"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,6 +65,7 @@ class FollowUser {
         'userName': userName,
         'face': face,
         'addTime': addTime.toString(),
-        'tag':tag,
+        'tag': tag,
+        'watchCount': watchCount,
       };
 }

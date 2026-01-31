@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
@@ -18,164 +19,184 @@ class FollowUserPage extends GetView<FollowUserController> {
 
   @override
   Widget build(BuildContext context) {
-    var count = MediaQuery.of(context).size.width ~/ 500;
-    if (count < 1) count = 1;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("关注用户"),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem(
-                  value: 0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.save_2_line),
-                      AppStyle.hGap12,
-                      Text("导出文件")
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.folder_open_line),
-                      AppStyle.hGap12,
-                      Text("导入文件")
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 2,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.text),
-                      AppStyle.hGap12,
-                      Text("导出文本"),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 3,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.file_text_line),
-                      AppStyle.hGap12,
-                      Text("导入文本"),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 4,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.price_tag_line),
-                      AppStyle.hGap12,
-                      Text("标签管理"),
-                    ],
-                  ),
-                ),
-              ];
-            },
-            onSelected: (value) {
-              if (value == 0) {
-                FollowService.instance.exportFile();
-              } else if (value == 1) {
-                FollowService.instance.inputFile();
-              } else if (value == 2) {
-                FollowService.instance.exportText();
-              } else if (value == 3) {
-                FollowService.instance.inputText();
-              } else if (value == 4) {
-                showTagsManager();
-              }
-            },
-          ),
-        ],
-        leading: Obx(
-          () => FollowService.instance.updating.value
-              ? const IconButton(
-                  onPressed: null,
-                  icon: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
+    return Obx(() {
+      var count = MediaQuery.of(context).size.width ~/
+          (controller.viewMode.value == 0 ? 500 : 120);
+      if (count < 1) count = 1;
+      return MediaQuery.removePadding(
+        context: context,
+        removeTop: Platform.isMacOS,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text("关注用户"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  controller.switchViewMode();
+                },
+                icon: Icon(controller.viewMode.value == 0
+                    ? Remix.list_check
+                    : Remix.grid_fill),
+              ),
+              PopupMenuButton(
+                itemBuilder: (context) {
+                  return const [
+                    PopupMenuItem(
+                      value: 0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.save_2_line),
+                          AppStyle.hGap12,
+                          Text("导出文件")
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              : IconButton(
-                  onPressed: () {
-                    controller.refreshData();
-                  },
-                  icon: const Icon(Icons.refresh),
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.folder_open_line),
+                          AppStyle.hGap12,
+                          Text("导入文件")
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.text),
+                          AppStyle.hGap12,
+                          Text("导出文本"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 3,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.file_text_line),
+                          AppStyle.hGap12,
+                          Text("导入文本"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 4,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.price_tag_line),
+                          AppStyle.hGap12,
+                          Text("标签管理"),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                onSelected: (value) {
+                  if (value == 0) {
+                    FollowService.instance.exportFile();
+                  } else if (value == 1) {
+                    FollowService.instance.inputFile();
+                  } else if (value == 2) {
+                    FollowService.instance.exportText();
+                  } else if (value == 3) {
+                    FollowService.instance.inputText();
+                  } else if (value == 4) {
+                    showTagsManager();
+                  }
+                },
+              ),
+            ],
+            leading: Obx(
+              () => FollowService.instance.updating.value
+                  ? const IconButton(
+                      onPressed: null,
+                      icon: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        controller.refreshData();
+                      },
+                      icon: const Icon(Icons.refresh),
+                    ),
+            ),
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: AppStyle.edgeInsetsL8,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Obx(
+                        () => SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Wrap(
+                              spacing: 12,
+                              children: controller.tagList.map((option) {
+                                return FilterButton(
+                                  text: option.tag,
+                                  selected:
+                                      controller.filterMode.value == option,
+                                  onTap: () {
+                                    controller.setFilterMode(option);
+                                  },
+                                );
+                              }).toList()),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+                  child: PageGridView(
+                    crossAxisSpacing: 12,
+                    crossAxisCount: count,
+                    pageController: controller,
+                    firstRefresh: true,
+                    showPCRefreshButton: false,
+                    itemBuilder: (_, i) {
+                      var item = controller.list[i];
+                      var site = Sites.allSites[item.siteId]!;
+                      return FollowUserItem(
+                        item: item,
+                        simple: controller.viewMode.value == 1,
+                        onRemove: () {
+                          controller.removeItem(item);
+                        },
+                        onTap: () {
+                          AppNavigator.toLiveRoomDetail(
+                              site: site, roomId: item.roomId);
+                        },
+                        onLongPress: () {
+                          setFollowTagDialog(item);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: AppStyle.edgeInsetsL8,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Obx(
-                    () => SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                          spacing: 12,
-                          children: controller.tagList.map((option) {
-                            return FilterButton(
-                              text: option.tag,
-                              selected: controller.filterMode.value == option,
-                              onTap: () {
-                                controller.setFilterMode(option);
-                              },
-                            );
-                          }).toList()),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: PageGridView(
-              crossAxisSpacing: 12,
-              crossAxisCount: count,
-              pageController: controller,
-              firstRefresh: true,
-              showPCRefreshButton: false,
-              itemBuilder: (_, i) {
-                var item = controller.list[i];
-                var site = Sites.allSites[item.siteId]!;
-                return FollowUserItem(
-                  item: item,
-                  onRemove: () {
-                    controller.removeItem(item);
-                  },
-                  onTap: () {
-                    AppNavigator.toLiveRoomDetail(
-                        site: site, roomId: item.roomId);
-                  },
-                  onLongPress: () {
-                    setFollowTagDialog(item);
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+      );
+    });
   }
 
   void setFollowTagDialog(FollowUser item) {

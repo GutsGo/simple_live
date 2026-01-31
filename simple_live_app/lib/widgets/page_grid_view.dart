@@ -100,8 +100,8 @@ class PageGridView extends StatelessWidget {
                           style: TextButton.styleFrom(
                             foregroundColor: Get.theme.colorScheme.onSurface,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 32,
-                              vertical: 12,
+                              horizontal: 16,
+                              vertical: 0,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: AppStyle.radius24,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:simple_live_app/app/log.dart';
@@ -171,6 +172,18 @@ class LocalStorageService extends GetxService {
   /// 侧边栏开启
   static const String kShowRightPanel = "ShowRightPanel";
 
+  /// 窗口宽度
+  static const String kWindowWidth = "WindowWidth";
+
+  /// 窗口高度
+  static const String kWindowHeight = "WindowHeight";
+
+  /// 窗口 X 坐标
+  static const String kWindowX = "WindowX";
+
+  /// 窗口 Y 坐标
+  static const String kWindowY = "WindowY";
+
   late Box settingsBox;
   late Box<String> shieldBox;
 
@@ -202,5 +215,33 @@ class LocalStorageService extends GetxService {
   Future removeValue<T>(dynamic key) async {
     Log.d("Remove LocalStorage：$key");
     return await settingsBox.delete(key);
+  }
+
+  Size? getWindowSize() {
+    double? width = getValue<double?>(kWindowWidth, null);
+    double? height = getValue<double?>(kWindowHeight, null);
+    if (width != null && height != null) {
+      return Size(width, height);
+    }
+    return null;
+  }
+
+  Future saveWindowSize(Size size) async {
+    await setValue(kWindowWidth, size.width);
+    await setValue(kWindowHeight, size.height);
+  }
+
+  Offset? getWindowOffset() {
+    double? x = getValue<double?>(kWindowX, null);
+    double? y = getValue<double?>(kWindowY, null);
+    if (x != null && y != null) {
+      return Offset(x, y);
+    }
+    return null;
+  }
+
+  Future saveWindowOffset(Offset offset) async {
+    await setValue(kWindowX, offset.dx);
+    await setValue(kWindowY, offset.dy);
   }
 }

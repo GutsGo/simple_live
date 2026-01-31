@@ -321,6 +321,15 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
       followed.value = DBService.instance.getFollowExist("${site.id}_$roomId");
       online.value = detail.value!.online;
       liveStatus.value = detail.value!.status || detail.value!.isRecord;
+
+      // 增加观看次数
+      var follow = FollowService.instance.followList
+          .firstWhereOrNull((x) => x.id == "${site.id}_$roomId");
+      if (follow != null) {
+        follow.watchCount++;
+        DBService.instance.addFollow(follow);
+      }
+
       if (liveStatus.value) {
         getPlayQualites();
       }

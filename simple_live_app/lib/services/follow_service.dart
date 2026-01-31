@@ -110,9 +110,13 @@ class FollowService extends GetxService {
       DBService.instance.updateFollowTag(tag);
     }
     // 标签内排序
-    curTagFollowList.sort(
-      (a, b) => b.liveStatus.value.compareTo(a.liveStatus.value),
-    );
+    curTagFollowList.sort((a, b) {
+      // 优先级 1: 观看次数 (降序)
+      int compare = b.watchCount.compareTo(a.watchCount);
+      if (compare != 0) return compare;
+      // 优先级 2: 直播状态 (降序，直播中 > 未开播)
+      return b.liveStatus.value.compareTo(a.liveStatus.value);
+    });
   }
 
   // 添加关注
@@ -154,7 +158,8 @@ class FollowService extends GetxService {
   /// 获取最优并发数
   /// 根据 CPU 核心数和用户设置自动计算
   int getOptimalConcurrency() {
-    var userSetting = AppSettingsController.instance.updateFollowThreadCount.value;
+    var userSetting =
+        AppSettingsController.instance.updateFollowThreadCount.value;
 
     // 如果用户设置为 0，则自动根据 CPU 核心数计算
     if (userSetting == 0) {
@@ -249,7 +254,13 @@ class FollowService extends GetxService {
   }
 
   void filterData() {
-    followList.sort((a, b) => b.liveStatus.value.compareTo(a.liveStatus.value));
+    followList.sort((a, b) {
+      // 优先级 1: 观看次数 (降序)
+      int compare = b.watchCount.compareTo(a.watchCount);
+      if (compare != 0) return compare;
+      // 优先级 2: 直播状态 (降序，直播中 > 未开播)
+      return b.liveStatus.value.compareTo(a.liveStatus.value);
+    });
     liveList.assignAll(followList.where((x) => x.liveStatus.value == 2));
     notLiveList.assignAll(followList.where((x) => x.liveStatus.value == 1));
     _updatedListController.add(0);

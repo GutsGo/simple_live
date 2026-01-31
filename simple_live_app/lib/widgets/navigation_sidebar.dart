@@ -25,7 +25,7 @@ class NavigationSidebar extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: 160,
+            width: 140,
             decoration: BoxDecoration(
               color: colorScheme.surface.withAlpha(160),
               border: Border(
