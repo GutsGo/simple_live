@@ -61,11 +61,23 @@ jobs:
       - name: Install flutter_distributor
         run: dart pub global activate flutter_distributor
 
+      #获取版本信息（自动从 Git Tag 提取）
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
       #打包APK
       - name: Build APK
         run: |
           cd stitchtv_app
           flutter build apk --release --split-per-abi
+
+      # 重命名 APK
+      - name: Rename APK
+        run: |
+          mv stitchtv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk stitchtv_app/build/app/outputs/flutter-apk/stitchtv_android_${{ steps.version.outputs.VERSION }}_armeabi-v7a.apk
+          mv stitchtv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk stitchtv_app/build/app/outputs/flutter-apk/stitchtv_android_${{ steps.version.outputs.VERSION }}_arm64-v8a.apk
+          mv stitchtv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk stitchtv_app/build/app/outputs/flutter-apk/stitchtv_android_${{ steps.version.outputs.VERSION }}_x86_64.apk
 
       #上传APK至Artifacts
       - name: Upload APK to Artifacts
@@ -73,9 +85,7 @@ jobs:
         with:
           name: android
           path: |
-            stitchtv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            stitchtv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            stitchtv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk
+            stitchtv_app/build/app/outputs/flutter-apk/*.apk
 
       #打包iOS
       - name: Build IPA
@@ -90,7 +100,7 @@ jobs:
           mkdir build/ios/iphoneos/Payload
           cp -R build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/Runner.app
           cd build/ios/iphoneos/
-          zip -q -r ios_no_sign.ipa Payload
+          zip -q -r stitchtv_ios_nosign_${{ steps.version.outputs.VERSION }}.ipa Payload
           cd ../../..
 
       #上传IPA至Artifacts
@@ -99,7 +109,7 @@ jobs:
         with:
           name: ios
           path: |
-            stitchtv_app/build/ios/iphoneos/ios_no_sign.ipa
+            stitchtv_app/build/ios/iphoneos/*.ipa
 
       # 打包MAC
       - name: Build MacOS
@@ -107,21 +117,21 @@ jobs:
           cd stitchtv_app
           flutter_distributor package --platform macos --targets dmg,zip --skip-clean
 
+      # 重命名 MacOS 产物
+      - name: Rename MacOS
+        run: |
+          mv stitchtv_app/build/dist/*/*.dmg stitchtv_app/build/dist/stitchtv_macos_${{ steps.version.outputs.VERSION }}.dmg
+          mv stitchtv_app/build/dist/*/*.zip stitchtv_app/build/dist/stitchtv_macos_${{ steps.version.outputs.VERSION }}.zip
+
       # 上传MAC至Artifacts
       - name: Upload MacOS to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mac
           path: |
-            stitchtv_app/build/dist/*/*.dmg
-            stitchtv_app/build/dist/*/*.zip
+            stitchtv_app/build/dist/*.dmg
+            stitchtv_app/build/dist/*.zip
 
-      #获取版本信息（自动从 Git Tag 提取）
-      - name: Get version from tag
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-      - name: Echo version
-        run: echo "${{ steps.version.outputs.VERSION }}"
 
       #上传至Release
       - name: Upload Release
@@ -132,11 +142,8 @@ jobs:
           prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            stitchtv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk
-            stitchtv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            stitchtv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            stitchtv_app/build/ios/iphoneos/ios_no_sign.ipa
-            stitchtv_app/build/dist/*/*.dmg
-            stitchtv_app/build/dist/*/*.zip
+            stitchtv_app/build/app/outputs/flutter-apk/*.apk
+            stitchtv_app/build/ios/iphoneos/*.ipa
+            stitchtv_app/build/dist/stitchtv_macos_${{ steps.version.outputs.VERSION }}.*
       #完成
       - run: echo "🍏 This job's status is ${{ job.status }}."

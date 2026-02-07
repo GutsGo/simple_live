@@ -49,26 +49,31 @@ jobs:
           cd stitchtv_tv_app
           flutter pub get
 
+      #获取版本信息（自动从 Git Tag 提取）
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
       #打包APK
       - name: Build APK
         run: |
           cd stitchtv_tv_app
           flutter build apk --release --split-per-abi
 
+      # 重命名 APK
+      - name: Rename APK
+        run: |
+          mv stitchtv_tv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk stitchtv_tv_app/build/app/outputs/flutter-apk/stitchtv_androidtv_${{ steps.version.outputs.VERSION }}_armeabi-v7a.apk
+          mv stitchtv_tv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk stitchtv_tv_app/build/app/outputs/flutter-apk/stitchtv_androidtv_${{ steps.version.outputs.VERSION }}_arm64-v8a.apk
+          mv stitchtv_tv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk stitchtv_tv_app/build/app/outputs/flutter-apk/stitchtv_androidtv_${{ steps.version.outputs.VERSION }}_x86_64.apk
+
       #上传APK至Artifacts
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android_tv
-          path: |
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk
+          path: stitchtv_tv_app/build/app/outputs/flutter-apk/*.apk
 
-      # 获取版本信息（自动从 Git Tag 提取）
-      - name: Get version from tag
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
       - name: Echo version
         run: echo "${{ steps.version.outputs.VERSION }}"
 
@@ -81,9 +86,7 @@ jobs:
           prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-x86_64-release.apk
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            stitchtv_tv_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            stitchtv_tv_app/build/app/outputs/flutter-apk/*.apk
 
       #完成
       - run: echo "🍏 This job's status is ${{ job.status }}."
