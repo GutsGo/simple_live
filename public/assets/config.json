@@ -1,0 +1,18 @@
+{
+  "version": "1.1.0",
+  "baseURL": "https://v6.gh-proxy.org/https://github.com/GutsGo/stitch_tv/releases/download",
+  "platforms": {
+    "android": "/v1.1.0/app-$arch-release.apk",
+    "androidTV": "/tv_v1.1.0/app-$arch-release.apk",
+    "ios": "",
+    "appleTV": "",
+    "windows": "",
+    "macOS": "/v1.1.0/stitchtv_app-1.1.0-macos.dmg"
+  },
+  "androidArchs": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "releaseNotes": "修复了一些问题。"
+}

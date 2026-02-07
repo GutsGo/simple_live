@@ -1,0 +1,35 @@
+dist
+
+# macOS Spotlight Search index file
+*.DS_Store
+
+# Flutter build outputs
+**/build/
+**/ios/Pods/
+**/android/.gradle/
+**/android/app/build/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Flutter pub cache
+.dart_tool/
+.pub-cache/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Docs
+.vitepress/cache/
+.vitepress/dist/
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other
+.env
+.env.local
