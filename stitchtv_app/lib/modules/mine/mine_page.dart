@@ -39,23 +39,22 @@ class MinePage extends StatelessWidget {
                     width: 40,
                     height: 40,
                   ),
-                  title: const Text(
-                    "乱炖直播",
-                    style: TextStyle(height: 1.0),
-                  ),
+                  title: const Text("乱炖直播", style: TextStyle(height: 1.0)),
                   subtitle: const Text("StitchTV"),
                   trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                   onTap: () {
-                    Get.dialog(AboutDialog(
-                      applicationIcon: Image.asset(
-                        'assets/images/logo.png',
-                        width: 48,
-                        height: 48,
+                    Get.dialog(
+                      AboutDialog(
+                        applicationIcon: Image.asset(
+                          'assets/images/logo.png',
+                          width: 48,
+                          height: 48,
+                        ),
+                        applicationName: "乱炖直播",
+                        applicationVersion: "StitchTV",
+                        applicationLegalese: "Ver ${Utils.packageInfo.version}",
                       ),
-                      applicationName: "乱炖直播",
-                      applicationVersion: "StitchTV",
-                      applicationLegalese: "Ver ${Utils.packageInfo.version}",
-                    ));
+                    );
                   },
                 ),
               ],
@@ -155,8 +154,10 @@ class MinePage extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Remix.apps_line),
                     title: const Text("测试"),
-                    trailing:
-                        const Icon(Icons.chevron_right, color: Colors.grey),
+                    trailing: const Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                     onTap: () async {
                       SignalRService signalRService = SignalRService();
                       await signalRService.connect();
@@ -184,7 +185,7 @@ class MinePage extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                   onTap: () {
                     launchUrlString(
-                      "https://github.com/xiaoyaocz/dart_stitchtv",
+                      "https://github.com/GutsGo/stitch_tv",
                       mode: LaunchMode.externalApplication,
                     );
                   },

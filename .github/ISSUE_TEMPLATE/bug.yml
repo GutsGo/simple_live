@@ -1,7 +1,7 @@
 name: BUG报告
 title: "[BUG] 请填写简短易读的标题"
 description: "使用过程中遇到了BUG"
-assignees: xiaoyaocz
+assignees: GutsGo
 labels:
   - "bug"
 body:

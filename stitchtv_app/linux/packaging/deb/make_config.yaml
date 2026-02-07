@@ -1,8 +1,7 @@
 display_name: StitchTV
 package_name: stitchtv
 maintainer:
-  name: xiaoyaocz
-  email: xiaoyaocz@52uwp.com
+  name: GutsGo
 priority: optional
 section: x11
 installed_size: 24400

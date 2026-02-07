@@ -1,7 +1,7 @@
 name: stitchtv_core
 version: 1.0.3
 description: "聚合直播核心库"
-repository: https://github.com/xiaoyaocz/dart_stitchtv
+repository: https://github.com/GutsGo/stitch_tv
 publish_to: "none"
 environment: 
   sdk: '>=3.10.0'
