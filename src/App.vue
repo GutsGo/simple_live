@@ -10,8 +10,7 @@ const hero = {
     alt: "StitchTV Multi-device Mockup"
   },
   actions: [
-    { theme: 'brand', text: 'Android TV 下载', link: 'https://github.com/GutsGo/stitch_tv/releases' },
-    { theme: 'alt', text: 'GitHub 项目', link: 'https://github.com/GutsGo/stitch_tv' }
+    { theme: 'brand', text: 'Android TV 下载', link: 'https://github.com/GutsGo/stitch_tv/releases' }
   ]
 }
 
