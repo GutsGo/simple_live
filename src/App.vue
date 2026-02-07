@@ -51,7 +51,7 @@ const fetchConfig = async () => {
     const isDev = import.meta.env.DEV
     const configUrl = isDev 
       ? '/assets/config.json' 
-      : 'https://v6.gh-proxy.org/https://raw.githubusercontent.com/GutsGo/stitch_tv/dev/public/assets/config.json'
+      : 'https://v6.gh-proxy.org/https://raw.githubusercontent.com/GutsGo/stitch_tv/docs/public/assets/config.json'
     
     const response = await fetch(configUrl)
     config.value = await response.json()
