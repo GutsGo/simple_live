@@ -794,13 +794,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.4"
-  stitchtv_core:
-    dependency: "direct main"
-    description:
-      path: "../stitchtv_core"
-      relative: true
-    source: path
-    version: "1.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -846,6 +839,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0+2"
+  stitchtv_core:
+    dependency: "direct main"
+    description:
+      path: "../stitchtv_core"
+      relative: true
+    source: path
+    version: "1.0.3"
   stream_channel:
     dependency: transitive
     description:
