@@ -6,7 +6,7 @@ const hero = {
   text: "全能直播播放器",
   tagline: "深耕多端开发，诚意打造出品。聚合全网直播资源，智能识别频道，无需复杂配置，极致流畅播放，优雅打造您的私人大屏影院。",
   image: {
-    src: "/images/hero_mockup.webp",
+    src: "/images/mockup.avif",
     alt: "StitchTV Multi-device Mockup"
   },
   actions: [
@@ -245,7 +245,7 @@ onMounted(async () => {
             @click="selectArchAndDownload(arch)"
           >
             <span class="arch-name">{{ arch }}</span>
-            <span v-if="arch === 'arm64-v8a'" class="recommend-badge">推荐</span>
+            <span v-if="(currentPlatform === 'Android TV' && arch === 'armeabi-v7a') || (currentPlatform === 'Android' && arch === 'arm64-v8a')" class="recommend-badge">推荐</span>
           </div>
         </div>
         <button class="modal-close" @click="showDownloadModal = false">取消</button>
@@ -388,7 +388,7 @@ onMounted(async () => {
 }
 
 .hero-image {
-  flex: 1;
+  flex: 1.5;
   display: flex;
   justify-content: center;
 }
