@@ -4,6 +4,7 @@ import 'package:stitchtv_app/app/app_style.dart';
 import 'package:stitchtv_app/app/sites.dart';
 import 'package:stitchtv_app/modules/search/search_controller.dart';
 import 'package:stitchtv_app/modules/search/search_list_view.dart';
+import 'package:stitchtv_app/modules/search/douyin/douyin_search_view.dart';
 
 class SearchPage extends GetView<AppSearchController> {
   const SearchPage({Key? key}) : super(key: key);
@@ -91,15 +92,11 @@ class SearchPage extends GetView<AppSearchController> {
         physics: const NeverScrollableScrollPhysics(),
         controller: controller.tabController,
         children: Sites.supportSites
-            .map((e) => SearchListView(
-                      e.id,
-                    )
-                // (e) => e.id == Constant.kDouyin
-                //     ? const DouyinSearchView()
-                //     : SearchListView(
-                //         e.id,
-                //       ),
-                )
+            .map((e) => e.id == 'douyin'
+                ? const DouyinSearchView()
+                : SearchListView(
+                    e.id,
+                  ))
             .toList(),
       ),
     );

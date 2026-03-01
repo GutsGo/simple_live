@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -48,35 +46,44 @@ class DouyinSearchView extends StatelessWidget {
               ),
             ),
           ),
-          if (Platform.isAndroid || Platform.isIOS)
-            InAppWebView(
-              onWebViewCreated: controller.onWebViewCreated,
-              onLoadStop: controller.onLoadStop,
-              onLoadStart: controller.onLoadStart,
-              initialSettings: InAppWebViewSettings(
-                useOnLoadResource: true,
-                userAgent:
-                    "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/118.0.0.0",
-                useShouldOverrideUrlLoading: true,
-              ),
-              onCreateWindow: controller.onCreateWindow,
-              shouldOverrideUrlLoading:
-                  (webController, navigationAction) async {
-                var uri = navigationAction.request.url;
-                if (uri == null) {
-                  return NavigationActionPolicy.ALLOW;
-                }
-                if (uri.host == "live.douyin.com") {
-                  var regExp = RegExp(r"live\.douyin\.com/([\d|\w]+)");
-                  var id = regExp.firstMatch(uri.toString())?.group(1) ?? "";
-
-                  AppNavigator.toLiveRoomDetail(
-                      site: controller.site, roomId: id);
-                  return NavigationActionPolicy.CANCEL;
-                }
-                return NavigationActionPolicy.ALLOW;
-              },
+          InAppWebView(
+            onWebViewCreated: controller.onWebViewCreated,
+            onLoadStop: controller.onLoadStop,
+            onLoadStart: controller.onLoadStart,
+            initialSettings: InAppWebViewSettings(
+              useOnLoadResource: true,
+              javaScriptEnabled: true,
+              userAgent:
+                  "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/118.0.0.0",
+              useShouldOverrideUrlLoading: true,
+              javaScriptCanOpenWindowsAutomatically: true,
+              supportMultipleWindows: true,
             ),
+            onCreateWindow: controller.onCreateWindow,
+            onUpdateVisitedHistory: controller.onUpdateVisitedHistory,
+            shouldOverrideUrlLoading: (webController, navigationAction) async {
+              var uri = navigationAction.request.url;
+              if (uri == null) {
+                return NavigationActionPolicy.ALLOW;
+              }
+
+              // 拦截非 http/https 协议（如 snssdk、aweme 等 Deep Link）
+              if (uri.scheme != "http" && uri.scheme != "https") {
+                return NavigationActionPolicy.CANCEL;
+              }
+
+              // 拦截直播间 URL，直接进入 App 原生播放
+              String urlStr = uri.toString();
+              String? id = controller.extractRoomId(urlStr);
+              if (id != null && id.isNotEmpty) {
+                AppNavigator.toLiveRoomDetail(
+                    site: controller.site, roomId: id);
+                return NavigationActionPolicy.CANCEL;
+              }
+
+              return NavigationActionPolicy.ALLOW;
+            },
+          ),
           Obx(
             () => Visibility(
               visible: controller.pageLoadding.value,
