@@ -683,7 +683,10 @@ class DouyinSite implements LiveSite {
       },
     );
     //var requlestUrl = await getAbogusUrl(uri.toString());
-    var requlestUrl = uri.toString();
+    var requlestUrl = DouyinSign.getAbogusUrl(
+      uri.toString(),
+      kDefaultUserAgent,
+    );
     var headResp = await HttpClient.instance.head(
       'https://live.douyin.com',
       header: headers,
@@ -724,10 +727,37 @@ class DouyinSite implements LiveSite {
       throw Exception("抖音直播搜索被限制，请稍后再试");
     }
     var items = <LiveRoomItem>[];
+    var addedRoomId = "";
+
+    // 尝试把关键字当做 webRid 解析
+    if (page == 1 && RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(keyword)) {
+      try {
+        var detail = await getRoomDetail(roomId: keyword);
+        if (detail.title.isNotEmpty) {
+          items.add(
+            LiveRoomItem(
+              roomId: detail.roomId,
+              title: detail.title,
+              cover: detail.cover,
+              userName: detail.userName,
+              online: detail.online,
+            ),
+          );
+          addedRoomId = detail.roomId;
+        }
+      } catch (e) {
+        CoreLog.error(e);
+      }
+    }
+
     for (var item in result["data"] ?? []) {
       var itemData = json.decode(item["lives"]["rawdata"].toString());
+      var curRoomId = itemData["owner"]["web_rid"].toString();
+      if (curRoomId == addedRoomId && addedRoomId.isNotEmpty) {
+        continue;
+      }
       var roomItem = LiveRoomItem(
-        roomId: itemData["owner"]["web_rid"].toString(),
+        roomId: curRoomId,
         title: itemData["title"].toString(),
         cover: itemData["cover"]["url_list"][0].toString(),
         userName: itemData["owner"]["nickname"].toString(),
