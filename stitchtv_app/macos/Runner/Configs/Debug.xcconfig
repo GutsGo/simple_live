@@ -1,3 +1,6 @@
 #include "../../Flutter/Flutter-Debug.xcconfig"
 #include "../../Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Warnings.xcconfig"
+
+APP_NAME_SUFFIX=-测试
+APP_ID_SUFFIX=.debug

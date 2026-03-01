@@ -51,7 +51,12 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["appName"] = "乱炖直播-测试"
+        }
+        getByName("release") {
+            manifestPlaceholders["appName"] = "乱炖直播"
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
